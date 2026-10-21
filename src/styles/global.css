@@ -5,9 +5,11 @@
   --text: #1b1b1b;
   --muted: #5a5955;
   --border: #e3e0da;
-  --accent: #2458a6;
-  --accent-hover: #1a4584;
-  --focus: #2458a6;
+  --accent: #0b5fa5;
+  --accent-hover: #084a80;
+  --focus: #0b5fa5;
+  --signature: #3a7d00;
+  --star: transparent;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -34,14 +36,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121416;
-    --bg-raised: #1b1e21;
-    --text: #e8e6e2;
-    --muted: #a5a29c;
-    --border: #2b2f33;
-    --accent: #8ab4f8;
-    --accent-hover: #a9c8ff;
-    --focus: #8ab4f8;
+    --bg: #0b0f17;
+    --bg-raised: #141a24;
+    --text: #e6edf3;
+    --muted: #9aa4b2;
+    --border: #243041;
+    --accent: #4cc9f0;
+    --accent-hover: #7fdcf7;
+    --focus: #4cc9f0;
+    --signature: #9ef01a;
+    --star: #e6edf3;
     color-scheme: dark;
   }
 }
@@ -157,7 +161,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--space-4) 0; }
 .nav a:hover { color: var(--text); }
 .nav a[aria-current="page"] {
   color: var(--text);
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--signature);
 }
 
 main {
@@ -195,6 +199,7 @@ main {
   margin: 0 0 var(--space-3);
 }
 .meta span + span::before { content: " · "; }
+.meta .dates { color: var(--signature); font-weight: 600; }
 
 /* Cards */
 .cards {
@@ -228,6 +233,66 @@ main {
 .card:hover h3 { color: var(--accent); }
 .card .meta { margin: 0 0 0.5rem; }
 .card p { margin: 0; }
+
+/* Home hero: starfield and shooting star, CSS only. Stars are transparent in
+   light mode (see --star), hidden in print, and static with reduced motion. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--space-3) var(--gutter) var(--space-4);
+  overflow: hidden;
+}
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.sky .stars,
+.sky .stars-far {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--star);
+}
+.sky .stars-far { width: 1px; height: 1px; opacity: 0.55; }
+.sky .stars { animation: twinkle 6s ease-in-out infinite alternate; }
+@keyframes twinkle {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+.sky .meteor {
+  position: absolute;
+  top: 12%;
+  left: 68%;
+  width: 160px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--signature), var(--accent) 45%, transparent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 60%, transparent);
+  transform: rotate(-32deg) translateX(0);
+  opacity: 0;
+  animation: meteor 11s linear infinite;
+  animation-delay: 2s;
+}
+@keyframes meteor {
+  0%    { opacity: 0; transform: rotate(-32deg) translateX(0); }
+  2%    { opacity: 1; }
+  9%    { opacity: 0; transform: rotate(-32deg) translateX(-520px); }
+  100%  { opacity: 0; transform: rotate(-32deg) translateX(-520px); }
+}
+@media (prefers-color-scheme: light) {
+  .sky .meteor { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky .stars { animation: none; }
+  .sky .meteor { display: none; }
+}
 
 /* Home intro */
 .intro {
@@ -266,7 +331,7 @@ main {
   font-size: var(--step--1);
   margin-top: var(--space-1);
 }
-.figure figcaption .fig-n { font-weight: 600; color: var(--text); }
+.figure figcaption .fig-n { font-weight: 600; color: var(--signature); }
 
 /* Markdown images inside project bodies */
 .prose img {
@@ -278,7 +343,7 @@ main {
 /* Now entries */
 .entry + .entry { border-top: 1px solid var(--border); padding-top: var(--space-3); margin-top: var(--space-3); }
 .entry h2 { margin-top: 0; font-size: var(--step-1); }
-.entry time { display: block; color: var(--muted); font-size: var(--step--1); margin-bottom: var(--space-1); }
+.entry time { display: block; color: var(--signature); font-size: var(--step--1); font-weight: 600; margin-bottom: var(--space-1); }
 
 /* Resume embed */
 .pdf-frame {
@@ -307,10 +372,11 @@ main {
 
 /* Print: a project page prints cleanly on A4 (CLAUDE.md A5) */
 @media print {
-  :root { --bg: #fff; --text: #000; --muted: #333; --border: #999; --accent: #000; color-scheme: light; }
+  :root { --bg: #fff; --text: #000; --muted: #333; --border: #999; --accent: #000; --signature: #000; color-scheme: light; }
   @page { size: A4; margin: 18mm; }
   body { font-size: 11pt; }
-  .site-header .nav, .site-footer ul, .no-print, .dev-warning { display: none !important; }
+  .site-header .nav, .site-footer ul, .no-print, .dev-warning, .sky { display: none !important; }
+  .hero { margin: 0; padding: 0; }
   .site-header, main { padding: 0; }
   .site-footer { border: 0; padding-top: 1rem; }
   a { color: #000; text-decoration: none; }
