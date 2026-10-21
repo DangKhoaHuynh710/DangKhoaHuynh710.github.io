@@ -19,16 +19,18 @@ function seeded(seed: number) {
     return s / 0x100000000;
   };
 }
-function stars(count: number, seed: number, w = 1600, h = 520): string {
+function stars(count: number, seed: number, extra = '', w = 1600, h = 520): string {
   const rnd = seeded(seed);
   const out: string[] = [];
   for (let i = 0; i < count; i++) {
-    out.push(`${Math.round(rnd() * w)}px ${Math.round(rnd() * h)}px`);
+    out.push(`${Math.round(rnd() * w)}px ${Math.round(rnd() * h)}px${extra}`);
   }
   return out.join(', ');
 }
-const near = stars(70, 20260710);
-const far = stars(140, 19860321);
+const far = stars(160, 19860321);
+const near = stars(90, 20260710, ' 0 0.5px');
+// A few larger stars with a soft glow.
+const bright = stars(16, 20250101, ' 3px 1px');
 ---
 
 <Base title={SITE.title}>
@@ -36,7 +38,9 @@ const far = stars(140, 19860321);
     <div class="sky" aria-hidden="true">
       <i class="stars-far" style={`box-shadow: ${far};`}></i>
       <i class="stars" style={`box-shadow: ${near};`}></i>
+      <i class="stars-bright" style={`box-shadow: ${bright};`}></i>
       <i class="meteor"></i>
+      <i class="meteor meteor-2"></i>
     </div>
     <div class="prose">
       <h1>Dang Khoa Huynh</h1>
