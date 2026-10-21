@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Figure from '../components/Figure.astro';
+import { SITE } from '../lib/site';
+import portrait from '../assets/images/about/portrait.svg';
+
+const featured = (await getCollection('projects', ({ data }) => data.cleared && data.featured))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || b.data.dates.localeCompare(a.data.dates))
+  .slice(0, 3);
+---
+
+<Base title={SITE.title}>
+  <section class="intro">
+    <div class="prose">
+      <h1>Dang Khoa Huynh</h1>
+      <p>
+        I am a third-year Mechatronics with Space Engineering student at the University of Sydney. I design,
+        build and test flight and ground electronics: PCBs, firmware and cable harnesses for rocket payloads,
+        launch-pad control systems and an electric race car.
+      </p>
+      <p>TODO: one more sentence if wanted, drafted and reviewed by me.</p>
+      <ul class="intro-links">
+        <li><a href="/resume.pdf">Resume (PDF)</a></li>
+        <li><a href={SITE.linkedin} rel="me noopener">LinkedIn</a></li>
+        <li><a href={`mailto:${SITE.email}`}>Email</a></li>
+      </ul>
+    </div>
+    <Figure
+      src={portrait}
+      alt="TODO: portrait photo of Dang Khoa Huynh"
+      loading="eager"
+      widths={[320, 640]}
+      sizes="(min-width: 720px) 16rem, 100vw"
+    />
+  </section>
+
+  <section>
+    <h2>Selected projects</h2>
+    {featured.length > 0 ? (
+      <ul class="cards">{featured.map((p) => <ProjectCard project={p} />)}</ul>
+    ) : (
+      <p class="muted">
+        Project pages are being prepared. See <a href="/now/">what I am working on now</a>.
+      </p>
+    )}
+  </section>
+</Base>

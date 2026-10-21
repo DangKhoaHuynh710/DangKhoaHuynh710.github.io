@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import { Image } from 'astro:assets';
+import Base from './Base.astro';
+import { PROJECT_SECTIONS } from '../lib/site';
+import { getCover } from '../lib/images';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  headings: MarkdownHeading[];
+}
+
+const { entry, headings } = Astro.props;
+const { title, role, dates, summary, coverAlt, links } = entry.data;
+const cover = await getCover(entry);
+
+// Enforce the fixed section order (CLAUDE.md A2/A4). Warn in dev, never in prod.
+const found = headings.filter((h) => h.depth === 2).map((h) => h.text.trim());
+const problems: string[] = [];
+PROJECT_SECTIONS.forEach((expected, i) => {
+  if (found[i] !== expected) {
+    problems.push(
+      `expected "## ${expected}" at position ${i + 1}, found ${found[i] ? `"## ${found[i]}"` : 'nothing'}`,
+    );
+  }
+});
+const extra = found.filter((h) => !PROJECT_SECTIONS.includes(h));
+if (extra.length) problems.push(`unexpected sections: ${extra.join(', ')}`);
+if (problems.length && import.meta.env.DEV) {
+  console.warn(`[projects/${entry.id}] section order problems:\n  - ${problems.join('\n  - ')}`);
+}
+---
+
+<Base title={title} description={summary}>
+  <article class="prose">
+    {import.meta.env.DEV && problems.length > 0 && (
+      <div class="dev-warning" role="status">
+        <strong>Dev only:</strong> section order problems in <code>{entry.id}.md</code>
+        <ul>{problems.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    )}
+
+    <header>
+      <h1>{title}</h1>
+      <p class="meta"><span>{role}</span><span>{dates}</span></p>
+      <p>{summary}</p>
+      <figure class="figure">
+        <Image
+          src={cover}
+          alt={coverAlt}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 72rem) 68ch, 100vw"
+          loading="eager"
+        />
+      </figure>
+    </header>
+
+    <slot />
+
+    {links && links.length > 0 && (
+      <ul class="links">
+        {links.map((l) => (
+          <li>
+            <a href={l.url} rel="noopener">{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </article>
+</Base>

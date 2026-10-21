@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate } from '../lib/site';
+
+const entries = (await getCollection('now')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const rendered = await Promise.all(entries.map(async (e) => ({ e, Content: (await render(e)).Content })));
+---
+
+<Base title="Now" description="What Dang Khoa Huynh is working on at the moment.">
+  <div class="prose">
+    <h1>Now</h1>
+    <p class="muted">What I am working on at the moment, newest first.</p>
+    {rendered.map(({ e, Content }) => (
+      <section class="entry">
+        <time datetime={e.data.date.toISOString().slice(0, 10)}>{formatDate(e.data.date)}</time>
+        <h2>{e.data.title}</h2>
+        <Content />
+      </section>
+    ))}
+  </div>
+</Base>

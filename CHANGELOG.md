@@ -2,4 +2,5 @@
 
 All content and structural changes to the site, newest first.
 
-- 2026-10-21 — Repo created with CLAUDE.md spec, .gitignore and this changelog. No site content yet.
+- 2026-10-21 — Scaffolded the Astro site: layouts, components, content schemas, placeholder pages (Home, About, Now, Resume, Projects), build checks and the GitHub Pages deploy workflow. All five projects have cleared: false and TODO placeholders; no project pages are published yet.
+- 2026-10-21 — Repo created with CLAUDE.md spec, .gitignore and this changelog.

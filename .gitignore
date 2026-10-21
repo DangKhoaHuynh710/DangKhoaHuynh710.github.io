@@ -21,3 +21,6 @@ npm-debug.log*
 
 # original full-size photos stay out of the repo (CLAUDE.md A1)
 originals/
+
+# local tool config
+.claude/

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dangkhoahuynh710.github.io/sitemap-index.xml

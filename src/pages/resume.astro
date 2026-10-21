@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Resume"
+  description="Resume of Dang Khoa Huynh, Mechatronics with Space Engineering student at the University of Sydney."
+>
+  <article class="prose">
+    <h1>Resume</h1>
+    <p><a href="/resume.pdf">Download the PDF</a>. The summary below is the same content in plain text.</p>
+
+    <object class="pdf-frame no-print" data="/resume.pdf" type="application/pdf" aria-label="Resume PDF">
+      <p class="muted">Your browser cannot display the PDF here. <a href="/resume.pdf">Open it directly</a>.</p>
+    </object>
+
+    <h2>Summary</h2>
+    <p>
+      Third-year Bachelor of Engineering (Honours) student, Mechatronics with Space Engineering, University of
+      Sydney. WAM 90.3, Dalyell Scholar, Dean's List 2025. Expected graduation 2028.
+    </p>
+
+    <h2>Experience</h2>
+    <ul>
+      <li>Ground Support Equipment (GSE) Co-Lead, USYD Rocketry Team, July 2026–Present</li>
+      <li>Payload Primary Electronics Engineer, USYD Rocketry Team – Rock Daisy Payload, 2025–2026</li>
+      <li>Low Voltage Engineer, Sydney Motorsport (FSAE Electric), 2025–2026</li>
+    </ul>
+    <p>TODO: one-line descriptions under each role, copied from the resume once it is final.</p>
+  </article>
+</Base>
