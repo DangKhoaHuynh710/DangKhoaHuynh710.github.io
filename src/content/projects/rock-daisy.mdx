@@ -1,0 +1,163 @@
+---
+title: Rock Daisy payload
+role: Payload Primary Electronics Engineer, USYD Rocketry Team – Rock Daisy Payload
+dates: 2025–2026
+summary: Flight computer, camera node and harness for a CubeSat-sized experiment that tested electrostatic sorting of lunar regolith in flight, and won the SDL Payload Challenge at IREC 2026.
+cover: pcba-v3.png
+coverAlt: Rock Daisy version 3 flight computer as delivered from JLCPCB, before the through-hole parts were soldered. A black PCB with two ESP32-S3 modules, two USB-C ports, a camera connector, a coin-cell holder and a yellow battery connector.
+cleared: true
+featured: true
+order: 1
+links:
+  - label: "University of Sydney news, 9 July 2026: Sydney students win big at international rocketry competition"
+    url: https://www.sydney.edu.au/news-opinion/news/2026/07/09/sydney-students-win-big-at-international-rocketry-competition.html
+---
+
+import Figure from '../../components/Figure.astro';
+import Video from '../../components/Video.astro';
+import iterations from '../../assets/images/rock-daisy/board-iterations.png';
+import internals from '../../assets/images/rock-daisy/internals-annotated.png';
+import stateMachine from '../../assets/images/rock-daisy/state-machine.png';
+import feedthrough from '../../assets/images/rock-daisy/feedthrough.webp';
+import cvFit from '../../assets/images/rock-daisy/cv-line-fit.png';
+import shakePoster from '../../assets/images/rock-daisy/shake-test-poster.jpg';
+import shakeVideo from '../../assets/media/rock-daisy/shake-test.mp4';
+
+## Overview
+
+Rock Daisy was the payload on Galah, the USYD Rocketry Team's 2026 rocket. It was a 3U CubeSat-sized experiment that tested one step towards mining the Moon: sorting ilmenite out of lunar soil with an electric field. Ilmenite is an iron-titanium mineral and a candidate source of oxygen on the Moon. Separating it is part of in-situ resource utilisation (ISRU), which means making what a mission needs from local material instead of launching it from Earth.
+
+The experiment ran during the rocket's coast phase, in reduced gravity. A motor-driven agitator rubbed ilmenite simulant against polypropylene to charge it. A servo then released the particles between two high-voltage plates 15 mm apart, and a camera filmed the stream as the field pushed it sideways. Everything sat inside a sealed aluminium chamber pumped down to 5 Pa, to reproduce the vacuum of space.
+
+At the International Rocket Engineering Competition (IREC) 2026 in Texas, Rock Daisy won first place in the SDL Payload Challenge.
+
+## My role
+
+I was the payload's primary electronics engineer, responsible for everything electrical from schematic to flight. I:
+
+- designed the flight computer's schematic and printed circuit board (PCB) through three versions, and assembled the flight board;
+- wrote the flight firmware: five FreeRTOS tasks and the launch-triggered flight state machine;
+- built the WiFi checkout dashboard used for bring-up and pre-flight testing;
+- added a second ESP32-S3 as a camera node, recording in-flight video on an OV5640 camera;
+- designed the switching for the 7 kV high-voltage module;
+- designed and built the payload's internal cable harness and connector scheme;
+- helped build the Python post-flight analysis that turns telemetry and video into a report.
+
+{/* TODO: confirm who designed the vacuum chamber, internal frame, dispenser and the feed-through PCB. */}
+This page focuses on the electronics. The vacuum chamber, internal frame and particle dispenser were designed by the wider payload team.
+
+## Photos
+
+<Figure
+  src={iterations}
+  n={1}
+  wide
+  alt="Three 3D renders of the Rock Daisy flight computer side by side: a round version 1 board with a single microcontroller module, a rectangular version 2 board carrying a Raspberry Pi, and the rectangular version 3 board with two ESP32-S3 modules, two USB-C ports and a yellow battery connector."
+  caption="The flight computer went through three versions, shown left to right. Each one fixed faults found while testing the one before."
+/>
+
+<Figure
+  src={internals}
+  n={2}
+  wide
+  zoom
+  alt="Annotated photos of the Rock Daisy payload. Two views of the pink 3D-printed internal frame show the flight computer, camera, antenna, servo, high-voltage module, DC motor, agitator, limit switch and high-voltage plates. A third photo shows the machined aluminium vacuum chamber with its triangular isogrid ribs, feed-through and front panel."
+  caption="Inside the payload with the vacuum chamber removed. Left: the avionics side. Centre: the charging and deflection train. Right: the aluminium vacuum chamber that encloses both."
+/>
+
+## Design decisions
+
+### Two microcontrollers with separate jobs
+
+The flight computer uses two ESP32-S3 microcontrollers. We chose the ESP32-S3 for its number of input and output pins and its built-in WiFi, which made a wireless checkout possible.
+
+The first one runs the experiment. It reads a high-g accelerometer (ADXL375) and a barometer (MS5607) on a 20 MHz serial peripheral interface (SPI) bus, logs to a microSD card, keeps time with a real-time clock, and drives the motor, servo, buzzer and high-voltage supply. The second one only runs the camera. The two are linked by a 40 MHz SPI connection, which lets the checkout dashboard on the first board show live images from the second.
+
+The first board uses both of its processor cores. One core decides the flight state. The other watches the telemetry stream and acts as a watchdog, so a single false sensor reading cannot push the payload into the wrong state.
+
+Power comes from a three-cell lithium-ion battery. On-board regulators make 5 V and 3.3 V for the sensors, servo and controllers. The unregulated battery rail feeds a Pololu motor driver for the DC motor.
+
+### Launch detection that ignores bumps
+
+A payload that starts its experiment on the pad is a failed payload, so the launch detector has to respond to a motor burn and nothing else. The firmware samples the accelerometer at 800 Hz, filters it, and looks at the last second of readings. It declares launch only when at least half of those samples exceed 35 m/s², about 3.5 g. A knock during handling is too short to count. A rocket motor is not.
+
+At launch, the agitator motor starts charging the particles and the camera node starts recording. Four seconds later (T+4 s), the servo releases the particles and the high-voltage supply and buzzer switch on. At T+29 s every output returns to its safe, inactive state. All T+ times count from the launch declaration, not from physical lift-off.
+
+At power-up, a mode-select pin chooses between test mode for the bench and flight mode. The board then starts the SPI bus, microSD card, non-volatile storage, sensors, wireless link and actuator outputs in turn. Each one reports whether it started, and any failure is saved to non-volatile storage and reported over USB and WiFi.
+
+{/* TODO: confirm the reading below. The diagram says 5 s and 30 s "since launch"; the report logs T+4 s and T+29 s from the launch declaration, and the bench video measures 29 s from trigger to shutdown. */}
+<Figure
+  src={stateMachine}
+  n={3}
+  wide
+  alt="Flowchart of the Rock Daisy firmware. When armed, a Test Mode decision leads either to bench testing (read EEPROM and perform hardware bring-up) or to flight mode. Flight mode initialises sensor reading and logging, waits for acceleration above 3.5 g for over 1 second, turns on the camera and charges the particles, then at 5 seconds turns on the high voltage and releases the particles, and at 30 seconds ends recording and turns off all actuators."
+  caption="Firmware flow. The times in this diagram count from lift-off. The firmware logs the same events at T+4 s and T+29 s because its clock starts at the launch declaration, about a second later."
+/>
+
+### Keeping 7 kV off until it should be on
+
+The plates are driven by an XP Power E70 high-voltage module, rated to 7 kV and current-limited. A supply like that must never switch on while people are handling the payload, so the high voltage sits behind two hardware layers.
+
+- **Two switches in series.** A relay and an N-channel MOSFET sit in series in the supply path. Each is driven by its own signal line, and both close only after launch has been detected. One stuck output or firmware fault cannot energise the plates on its own.
+- **A limit switch as an interlock.** The high voltage can only activate when the module is enclosed and cannot be touched.
+
+### Working inside a sealed aluminium box
+
+The vacuum chamber made three electrical problems that a normal payload does not have.
+
+**Getting connections through the wall.** Every external connection, including the status lights and buzzer, the remove-before-flight pin and the radio link, has to pass through the chamber wall without leaking. We compared commercial vacuum feed-throughs, hermetic military-spec connectors and a custom PCB feed-through. The commercial options cost far more, and their flanged mounts would have taken internal volume that a 3U payload cannot spare. We chose a custom PCB clamped between a retainer and the chamber body. An O-ring seals against a copper ring on the PCB, and sealed vias carry the signals through.
+
+**Radio.** An aluminium box blocks radio, so with the chamber closed on the ground the WiFi antennas inside could not reach the outside world directly. The feed-through is the only path the signal has out of the chamber.
+
+**Heat.** In a vacuum there is no air to carry heat away. A copper brace conducts heat from the internal electronics to the aluminium chamber, and the high-voltage board is heat-sunk into the chamber body through thermal pads.
+
+<Figure
+  src={feedthrough}
+  n={4}
+  alt="Render of the circular electrical vacuum feed-through PCB, black with the USYD Rocketry Team logo, two sealed vias and an external two-pin BM02B-GHS-TBT connector, inside a grey mounting face."
+  caption="The electrical vacuum feed-through. Making it a PCB gave free choice of connectors and a smaller footprint than an off-the-shelf feed-through."
+/>
+
+## Testing and what broke
+
+{/* TODO: add how this fault was found (for example, during integration with the chamber closed) and anything else that broke in versions 1 and 2. */}
+**No way to tell it was alive.** In versions 1 and 2, once the board was installed inside the payload there was no way to confirm it had powered on. Version 3 fixed this with test mode and a WiFi dashboard. On the bench it shows live telemetry and board health, fires the motor, servo, buzzer and high-voltage output one at a time, and pulls logs off the microSD card. In test mode, log timestamps are taken from the connected device's clock when the dashboard connects, rather than from the real-time clock.
+
+{/* TODO: confirm that 1.3 g was a lowered trigger threshold for this bench test. */}
+<Video
+  src={shakeVideo}
+  poster={shakePoster}
+  n={1}
+  width={540}
+  height={960}
+  label="Bench test: the Rock Daisy internal frame is shaken by hand, then its internal lights switch on for about 29 seconds and switch off again."
+  caption="Bench test of the flight sequence. Shaking the payload by hand trips the launch detector, with the trigger threshold set to 1.3 g for this test. About 11 seconds in, the sequence starts and the internal lights come on. 29 seconds later the firmware switches everything off, matching the T+29 s shutdown."
+/>
+
+Before flight the payload passed four formal tests:
+
+- vacuum chamber test, 15 January 2026;
+- agitator and actuators test, 28 March 2026;
+- bench test, 8 April 2026;
+- plastics structural integrity test, 8 April 2026.
+
+The video analysis was checked the same way. The same pipeline was run on a stationary bench recording and on a vibration-only control, using the same camera, particle feed and high-voltage hardware. That separates what the electric field does from what rocket vibration does.
+
+## Result
+
+Rock Daisy won first place in the SDL Payload Challenge at IREC 2026, held at Spaceport Midland in Texas. The competition drew 150 teams from more than 20 countries, and the USYD Rocketry Team became the first team to win the SDL Payload Challenge twice.
+
+In flight, the camera recorded the particle stream through the high-voltage window. The analysis pipeline then tracked the stream frame by frame. It finds the two plate edges, splits the gap into horizontal bands, takes the centre of the dark particle stream in each band, and fits a line through those centres. The stream's position is measured from 0 at the negative plate to 1 at the positive plate.
+
+{/* TODO: add the headline measured result (deflection or separation) once you are happy to publish a number. */}
+<Figure
+  src={cvFit}
+  n={5}
+  wide
+  alt="Two video frames from inside the payload. Left: the raw camera frame of the particle stream between the plates. Right: the same frame with red lines on the detected plate edges, pink dots on the stream centre in each band, and a green fitted centreline."
+  caption="One frame from the high-voltage window, 0.4 s after the plates switched on (T+4.40 s). Left: the raw frame. Right: the pipeline's output. Red lines mark the plate edges, found with RANSAC, a line-fitting method that ignores outliers. Pink dots mark the stream centre in each band, and the green line is the fitted centreline."
+/>
+
+## Links
+
+The University of Sydney covered the result in its news story on the competition.
