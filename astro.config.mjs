@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
 import clearedImages from './plugins/cleared-images.mjs';
 
 // GitHub Pages user site. Keep internal links relative so a custom domain
@@ -8,7 +9,7 @@ import clearedImages from './plugins/cleared-images.mjs';
 export default defineConfig({
   site: 'https://dangkhoahuynh710.github.io',
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  integrations: [mdx(), sitemap()],
   build: {
     format: 'directory',
   },

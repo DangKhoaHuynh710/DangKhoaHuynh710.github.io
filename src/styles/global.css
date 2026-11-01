@@ -355,6 +355,26 @@ main {
 }
 .figure figcaption .fig-n { font-weight: 600; color: var(--signature); }
 
+/* Wide figures extend past the text column on large screens (prose is left-aligned). */
+.prose .figure.wide {
+  width: min(calc(100vw - 2 * var(--gutter)), calc(var(--wide) - 2 * var(--gutter)));
+  max-width: none;
+}
+.figure-zoom { display: block; cursor: zoom-in; border-radius: var(--radius); }
+.figure-zoom:hover img { border-color: var(--muted); }
+
+/* Video: portrait clips are capped in height so they never fill a phone screen. */
+.figure.video video {
+  display: block;
+  max-width: 100%;
+  max-height: min(78vh, 640px);
+  width: auto;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #000;
+}
+
 /* Markdown images inside project bodies */
 .prose img {
   border-radius: var(--radius);
@@ -397,7 +417,8 @@ main {
   :root { --bg: #fff; --text: #000; --muted: #333; --border: #999; --accent: #000; --signature: #000; --signature-glow: none; color-scheme: light; }
   @page { size: A4; margin: 18mm; }
   body { font-size: 11pt; }
-  .site-header .nav, .site-footer ul, .no-print, .dev-warning, .sky { display: none !important; }
+  .site-header .nav, .site-footer ul, .no-print, .dev-warning, .sky, .figure.video video { display: none !important; }
+  .prose .figure.wide { width: 100%; }
   .hero { margin: 0; padding: 0; }
   .site-header, main { padding: 0; }
   .site-footer { border: 0; padding-top: 1rem; }

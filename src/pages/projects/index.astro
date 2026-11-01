@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import { isVisible } from '../../lib/visibility';
 
 // Only cleared projects (CLAUDE.md A1). Sort by order, then dates descending.
-const projects = (await getCollection('projects', ({ data }) => data.cleared)).sort(
+const projects = (await getCollection('projects', isVisible)).sort(
   (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || b.data.dates.localeCompare(a.data.dates),
 );
 ---

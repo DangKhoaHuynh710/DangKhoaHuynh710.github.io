@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "dev:drafts": "node scripts/dev-drafts.mjs",
     "build": "astro build && node scripts/check-build.mjs",
     "preview": "astro preview",
     "check": "astro check",
@@ -14,6 +15,7 @@
     "node": ">=22.22"
   },
   "dependencies": {
+    "@astrojs/mdx": "^8.1.2",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.1",
     "sharp": "^0.35.5"

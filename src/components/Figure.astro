@@ -1,6 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 
 // Image with a required caption and alt text. Alt must describe the hardware,
 // not say "image of board" (CLAUDE.md A5). An empty alt fails the build.
@@ -10,6 +10,10 @@ interface Props {
   caption?: string;
   /** Figure number, shown in bold before the caption. */
   n?: number;
+  /** Let the figure extend past the text column on wide screens. */
+  wide?: boolean;
+  /** Wrap the image in a link to a full-resolution copy (for dense figures). */
+  zoom?: boolean;
   widths?: number[];
   sizes?: string;
   loading?: 'eager' | 'lazy';
@@ -21,8 +25,10 @@ const {
   alt,
   caption,
   n,
-  widths = [480, 800, 1200],
-  sizes = '(min-width: 72rem) 68ch, 100vw',
+  wide = false,
+  zoom = false,
+  widths = wide ? [640, 1024, 1600] : [480, 800, 1200],
+  sizes = wide ? '(min-width: 72rem) 68rem, 100vw' : '(min-width: 72rem) 68ch, 100vw',
   loading = 'lazy',
   class: className = '',
 } = Astro.props;
@@ -30,15 +36,27 @@ const {
 if (!alt || !alt.trim()) {
   throw new Error(`Figure: alt text is required (image ${src.src})`);
 }
+
+const full = zoom ? await getImage({ src, width: Math.min(src.width, 2400), format: 'webp' }) : null;
+const classes = ['figure', wide && 'wide', className].filter(Boolean).join(' ');
+const usableWidths = widths.filter((w) => w <= src.width);
+const finalWidths = usableWidths.length ? usableWidths : [src.width];
 ---
 
-<figure class={`figure ${className}`.trim()}>
-  <Image src={src} alt={alt} widths={widths} sizes={sizes} loading={loading} />
+<figure class={classes}>
+  {full ? (
+    <a class="figure-zoom" href={full.src} aria-label={`Open full-size image: ${alt}`}>
+      <Image src={src} alt={alt} widths={finalWidths} sizes={sizes} loading={loading} />
+    </a>
+  ) : (
+    <Image src={src} alt={alt} widths={finalWidths} sizes={sizes} loading={loading} />
+  )}
   {caption && (
     <figcaption>
       {n !== undefined && <span class="fig-n">Figure {n}.</span>}
       {' '}
       {caption}
+      {full && <span class="no-print"> Select the image to open it full size.</span>}
     </figcaption>
   )}
 </figure>

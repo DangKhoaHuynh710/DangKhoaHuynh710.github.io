@@ -34,6 +34,12 @@ if (problems.length && import.meta.env.DEV) {
 
 <Base title={title} description={summary}>
   <article class="prose">
+    {!entry.data.cleared && (
+      <div class="dev-warning" role="status">
+        <strong>Draft preview:</strong> this project has <code>cleared: false</code> and is not published.
+      </div>
+    )}
+
     {import.meta.env.DEV && problems.length > 0 && (
       <div class="dev-warning" role="status">
         <strong>Dev only:</strong> section order problems in <code>{entry.id}.md</code>

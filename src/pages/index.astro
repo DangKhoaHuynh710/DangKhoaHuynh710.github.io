@@ -4,9 +4,10 @@ import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Figure from '../components/Figure.astro';
 import { SITE } from '../lib/site';
+import { isVisible } from '../lib/visibility';
 import portrait from '../assets/images/about/portrait.svg';
 
-const featured = (await getCollection('projects', ({ data }) => data.cleared && data.featured))
+const featured = (await getCollection('projects', (p) => isVisible(p) && p.data.featured))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || b.data.dates.localeCompare(a.data.dates))
   .slice(0, 3);
 

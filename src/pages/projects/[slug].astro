@@ -1,10 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Project from '../../layouts/Project.astro';
+import { isVisible } from '../../lib/visibility';
 
 // Publishing gate: a project with cleared: false gets no page at all (CLAUDE.md A1).
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => data.cleared === true);
+  const projects = await getCollection('projects', isVisible);
   return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
