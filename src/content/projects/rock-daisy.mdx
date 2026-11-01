@@ -27,7 +27,7 @@ import shakeVideo from '../../assets/media/rock-daisy/shake-test.mp4';
 
 Rock Daisy was the payload on Galah, the USYD Rocketry Team's 2026 rocket. It was a 3U CubeSat-sized experiment that tested one step towards mining the Moon: sorting ilmenite out of lunar soil with an electric field. Ilmenite is an iron-titanium mineral and a candidate source of oxygen on the Moon. Separating it is part of in-situ resource utilisation (ISRU), which means making what a mission needs from local material instead of launching it from Earth.
 
-The experiment ran during the rocket's coast phase, in reduced gravity. A motor-driven agitator rubbed ilmenite simulant against polypropylene to charge it. A servo then released the particles between two high-voltage plates 15 mm apart, and a camera filmed the stream as the field pushed it sideways. Everything sat inside a sealed aluminium chamber pumped down to 5 Pa, to reproduce the vacuum of space.
+The experiment ran during the rocket's coast phase, in reduced gravity. A motor-driven agitator rubbed ilmenite simulant against polypropylene to charge it. A servo then released the particles between two plates 15 mm apart with 7 kV across them, a field of about 467 kV/m, and a camera filmed the stream as the field pushed it sideways. Everything sat inside a sealed aluminium chamber pumped down to 5 Pa, to reproduce the vacuum of space.
 
 At the International Rocket Engineering Competition (IREC) 2026 in Texas, Rock Daisy won first place in the SDL Payload Challenge.
 
@@ -43,8 +43,7 @@ I was the payload's primary electronics engineer, responsible for everything ele
 - designed and built the payload's internal cable harness and connector scheme;
 - helped build the Python post-flight analysis that turns telemetry and video into a report.
 
-{/* TODO: confirm who designed the vacuum chamber, internal frame, dispenser and the feed-through PCB. */}
-This page focuses on the electronics. The vacuum chamber, internal frame and particle dispenser were designed by the wider payload team.
+This page focuses on the electronics. The vacuum chamber, internal frame and particle dispenser were designed by the wider payload team, and the vacuum feed-through board by Charlie Balderstone, Galah's technical director.
 
 ## Photos
 
@@ -85,18 +84,17 @@ At launch, the agitator motor starts charging the particles and the camera node 
 
 At power-up, a mode-select pin chooses between test mode for the bench and flight mode. The board then starts the SPI bus, microSD card, non-volatile storage, sensors, wireless link and actuator outputs in turn. Each one reports whether it started, and any failure is saved to non-volatile storage and reported over USB and WiFi.
 
-{/* TODO: confirm the reading below. The diagram says 5 s and 30 s "since launch"; the report logs T+4 s and T+29 s from the launch declaration, and the bench video measures 29 s from trigger to shutdown. */}
 <Figure
   src={stateMachine}
   n={3}
   wide
-  alt="Flowchart of the Rock Daisy firmware. When armed, a Test Mode decision leads either to bench testing (read EEPROM and perform hardware bring-up) or to flight mode. Flight mode initialises sensor reading and logging, waits for acceleration above 3.5 g for over 1 second, turns on the camera and charges the particles, then at 5 seconds turns on the high voltage and releases the particles, and at 30 seconds ends recording and turns off all actuators."
-  caption="Firmware flow. The times in this diagram count from lift-off. The firmware logs the same events at T+4 s and T+29 s because its clock starts at the launch declaration, about a second later."
+  alt="Flowchart of the Rock Daisy firmware. When armed, a Test Mode decision leads either to bench testing (read EEPROM and perform hardware bring-up) or to flight mode. Flight mode initialises sensor reading and logging, waits for acceleration above 3.5 g for over 1 second, turns on the camera and charges the particles, then at 4 seconds turns on the high voltage and releases the particles, and at 29 seconds ends recording and turns off all actuators."
+  caption="Firmware flow. A pin read at power-up chooses bench test mode or flight mode. In flight mode, all times count from the launch declaration."
 />
 
 ### Keeping 7 kV off until it should be on
 
-The plates are driven by an XP Power E70 high-voltage module, rated to 7 kV and current-limited. A supply like that must never switch on while people are handling the payload, so the high voltage sits behind two hardware layers.
+The plates are driven by an XP Power E70 high-voltage module. Its output scales with its input, reaching 7 kV only at 15 V, so the battery supply is boosted to 15 V at its input to get the full 7 kV. The module is current-limited. A supply like that must never switch on while people are handling the payload, so the high voltage sits behind two hardware layers.
 
 - **Two switches in series.** A relay and an N-channel MOSFET sit in series in the supply path. Each is driven by its own signal line, and both close only after launch has been detected. One stuck output or firmware fault cannot energise the plates on its own.
 - **A limit switch as an interlock.** The high voltage can only activate when the module is enclosed and cannot be touched.
@@ -115,15 +113,16 @@ The vacuum chamber made three electrical problems that a normal payload does not
   src={feedthrough}
   n={4}
   alt="Render of the circular electrical vacuum feed-through PCB, black with the USYD Rocketry Team logo, two sealed vias and an external two-pin BM02B-GHS-TBT connector, inside a grey mounting face."
-  caption="The electrical vacuum feed-through. Making it a PCB gave free choice of connectors and a smaller footprint than an off-the-shelf feed-through."
+  caption="The electrical vacuum feed-through, designed by Charlie Balderstone. Making it a PCB gave free choice of connectors and a smaller footprint than an off-the-shelf feed-through."
 />
 
 ## Testing and what broke
 
-{/* TODO: add how this fault was found (for example, during integration with the chamber closed) and anything else that broke in versions 1 and 2. */}
+{/* TODO: which version had the reset-switch fault, and what changed to fix it? */}
+**A reset switch that fired in flight.** On an earlier version of the board, the reset switch was mechanically unstable, and it reset the board by accident during flight.
+
 **No way to tell it was alive.** In versions 1 and 2, once the board was installed inside the payload there was no way to confirm it had powered on. Version 3 fixed this with test mode and a WiFi dashboard. On the bench it shows live telemetry and board health, fires the motor, servo, buzzer and high-voltage output one at a time, and pulls logs off the microSD card. In test mode, log timestamps are taken from the connected device's clock when the dashboard connects, rather than from the real-time clock.
 
-{/* TODO: confirm that 1.3 g was a lowered trigger threshold for this bench test. */}
 <Video
   src={shakeVideo}
   poster={shakePoster}
@@ -131,7 +130,7 @@ The vacuum chamber made three electrical problems that a normal payload does not
   width={540}
   height={960}
   label="Bench test: the Rock Daisy internal frame is shaken by hand, then its internal lights switch on for about 29 seconds and switch off again."
-  caption="Bench test of the flight sequence. Shaking the payload by hand trips the launch detector, with the trigger threshold set to 1.3 g for this test. About 11 seconds in, the sequence starts and the internal lights come on. 29 seconds later the firmware switches everything off, matching the T+29 s shutdown."
+  caption="Bench test of the flight sequence (no sound). Shaking the payload by hand trips the launch detector, with the trigger threshold lowered to 1.3 g for this test; it was 3.5 g in flight. About 11 seconds in, the sequence starts and the internal lights come on. 29 seconds later the firmware switches everything off, matching the T+29 s shutdown."
 />
 
 Before flight the payload passed four formal tests:

@@ -21,7 +21,7 @@ Last reviewed: 2026-11-01
 | About | `/about/` | Live, placeholder bio | Bio draft |
 | Now | `/now/` | Live, placeholder entry | Text for the GSE pad box entry |
 | Resume | `/resume/` | Live, placeholder PDF | Real `public/resume.pdf`; one-line role descriptions |
-| Projects index | `/projects/` | Rock Daisy card ready | Merge of the Rock Daisy page |
+| Projects index | `/projects/` | Live, 1 project | More projects cleared |
 
 ### Projects
 
@@ -29,7 +29,7 @@ A project page is only built when `cleared: true`. See [Publishing gate](#publis
 
 | Project | Slug | Cleared | Content | Photos | Waiting on |
 |---|---|---|---|---|---|
-| Rock Daisy payload | `rock-daisy` | Yes (2026-11-01) | Full draft, in review | 5 figures, 1 video | Your review; open questions in hidden comments |
+| Rock Daisy payload | `rock-daisy` | Yes (2026-11-01) | Live | 5 figures, 1 video | Headline result number; reset-switch fix detail |
 | GSE pad control box | `gse-pad-box` | No | TODO headings only | None | Team clearance; current board status |
 | FSAE low-voltage | `fsae-low-voltage` | No | TODO headings only | None | Team clearance; draft; photos |
 | 2-axis linear stage | `linear-stage` | No | TODO headings only | None | Year; exact lidar model; draft; photos |
@@ -48,7 +48,7 @@ From CLAUDE.md B9.
 ### Next up
 
 1. Replace `public/resume.pdf` with the real resume.
-2. Review the Rock Daisy page draft, answer its open questions, then publish it.
+2. Add the Rock Daisy headline result and the reset-switch fix when ready (hidden comments in `rock-daisy.mdx`).
 3. About bio and portrait.
 
 When something on this board changes, update the table and add a line to [CHANGELOG.md](CHANGELOG.md).
