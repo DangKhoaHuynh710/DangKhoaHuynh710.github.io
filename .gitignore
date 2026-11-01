@@ -24,3 +24,6 @@ originals/
 
 # local tool config
 .claude/
+
+# local-only material not yet cleared for publishing (team photos, renders, notes)
+private/
