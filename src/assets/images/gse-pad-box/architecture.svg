@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title>Kookaburra pad box electronics architecture</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b2"/>
+    </marker>
+    <marker id="arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9ef01a"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="900" fill="#0b0f17"/>
+
+  <!-- connectors -->
+  <g stroke="#9aa4b2" stroke-width="2.5" fill="none">
+    <line x1="600" y1="146" x2="600" y2="212" stroke-dasharray="8 7"/>
+    <line x1="600" y1="284" x2="600" y2="332" marker-end="url(#arrow)"/>
+    <path d="M600 410 V 450 M220 450 H 980 M220 450 V 488 M600 450 V 488 M980 450 V 488"/>
+    <path d="M220 600 V 648" marker-end="url(#arrow)"/>
+    <path d="M600 600 V 648" marker-end="url(#arrow)"/>
+    <path d="M980 648 V 602" marker-end="url(#arrow)"/>
+    <path d="M860 324 V 380 H 802" stroke-dasharray="4 6"/>
+  </g>
+  <line x1="380" y1="575" x2="436" y2="575" stroke="#9ef01a" stroke-width="3" marker-end="url(#arrow-g)"/>
+
+  <g font-size="17" fill="#9aa4b2">
+    <text x="616" y="186">long-range wireless link</text>
+    <text x="616" y="314">USB</text>
+    <text x="616" y="440">RS-485 (Modbus RTU), one bus per board</text>
+    <text x="410" y="540" text-anchor="middle" font-size="15" fill="#9ef01a">valve</text>
+    <text x="410" y="558" text-anchor="middle" font-size="15" fill="#9ef01a">power</text>
+  </g>
+
+  <!-- boxes: grey = other, blue = briefed by me, green = designed by me -->
+  <g stroke-width="3">
+    <rect x="400" y="70" width="400" height="76" rx="10" fill="#141a24" stroke="#9aa4b2"/>
+    <rect x="400" y="212" width="400" height="72" rx="10" fill="#141a24" stroke="#9aa4b2"/>
+    <rect x="400" y="334" width="400" height="76" rx="10" fill="#141a24" stroke="#4cc9f0"/>
+    <rect x="860" y="200" width="290" height="124" rx="10" fill="#141a24" stroke="#4cc9f0"/>
+    <rect x="60" y="490" width="320" height="110" rx="10" fill="#141a24" stroke="#9ef01a"/>
+    <rect x="440" y="490" width="320" height="110" rx="10" fill="#141a24" stroke="#9ef01a"/>
+    <rect x="820" y="490" width="320" height="110" rx="10" fill="#141a24" stroke="#4cc9f0"/>
+    <rect x="60" y="650" width="320" height="96" rx="10" fill="#141a24" stroke="#9aa4b2" stroke-dasharray="6 5"/>
+    <rect x="440" y="650" width="320" height="136" rx="10" fill="#141a24" stroke="#9aa4b2" stroke-dasharray="6 5"/>
+    <rect x="820" y="650" width="320" height="96" rx="10" fill="#141a24" stroke="#9aa4b2" stroke-dasharray="6 5"/>
+  </g>
+
+  <g fill="#e6edf3" text-anchor="middle">
+    <text x="600" y="104" font-size="24" font-weight="600">Launch Controller</text>
+    <text x="600" y="132" font-size="17" fill="#9aa4b2">at the flight line, hundreds of metres away</text>
+
+    <text x="600" y="244" font-size="24" font-weight="600">Pad Box mini-PC</text>
+    <text x="600" y="270" font-size="17" fill="#9aa4b2">runs the ground control software</text>
+
+    <text x="600" y="367" font-size="24" font-weight="600">Command Hub</text>
+    <text x="600" y="394" font-size="17" fill="#9aa4b2">RS-485 master for up to 10 buses</text>
+
+    <text x="1005" y="236" font-size="22" font-weight="600">Power Distribution</text>
+    <text x="1005" y="264" font-size="17" fill="#9aa4b2">protected 5, 12, 24 and 48 V</text>
+    <text x="1005" y="287" font-size="17" fill="#9aa4b2">eFuse on every rail</text>
+    <text x="1005" y="310" font-size="17" fill="#9aa4b2">latch button + command to enable</text>
+
+    <text x="220" y="528" font-size="24" font-weight="600">Valve Control Board</text>
+    <text x="220" y="557" font-size="17" fill="#c9d1d9">12 PWM valve channels</text>
+    <text x="220" y="581" font-size="17" fill="#c9d1d9">current and voltage on each</text>
+
+    <text x="600" y="528" font-size="24" font-weight="600">Umbilical &amp; QD Board</text>
+    <text x="600" y="557" font-size="17" fill="#c9d1d9">USB host to both flight computers</text>
+    <text x="600" y="581" font-size="17" fill="#c9d1d9">quick disconnect, battery charging</text>
+
+    <text x="980" y="528" font-size="24" font-weight="600">Sensor Nodes</text>
+    <text x="980" y="557" font-size="17" fill="#c9d1d9">digitise pressure, load-cell and</text>
+    <text x="980" y="581" font-size="17" fill="#c9d1d9">temperature at the sensor</text>
+
+    <text x="220" y="688" font-size="20" font-weight="600">Ground fill-system valves</text>
+    <text x="220" y="716" font-size="17" fill="#9aa4b2">9 × 24 V and 3 × 12 V</text>
+
+    <text x="600" y="688" font-size="20" font-weight="600">Launch vehicle</text>
+    <text x="600" y="716" font-size="17" fill="#9aa4b2">forward and aft flight computers</text>
+    <text x="600" y="740" font-size="17" fill="#9aa4b2">main oxidiser, vent and dump valves</text>
+    <text x="600" y="764" font-size="17" fill="#9aa4b2">fill-line quick disconnect actuator</text>
+
+    <text x="980" y="688" font-size="20" font-weight="600">Sensors</text>
+    <text x="980" y="716" font-size="17" fill="#9aa4b2">on the fill system</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="18" fill="#c9d1d9">
+    <rect x="60" y="836" width="22" height="22" rx="4" fill="none" stroke="#9ef01a" stroke-width="3"/>
+    <text x="94" y="854">Designed by me</text>
+    <rect x="300" y="836" width="22" height="22" rx="4" fill="none" stroke="#4cc9f0" stroke-width="3"/>
+    <text x="334" y="854">Briefed by me, designed by new engineers</text>
+    <rect x="760" y="836" width="22" height="22" rx="4" fill="none" stroke="#9aa4b2" stroke-width="3"/>
+    <text x="794" y="854">Other equipment</text>
+  </g>
+</svg>
