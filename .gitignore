@@ -27,3 +27,6 @@ originals/
 
 # local-only material not yet cleared for publishing (team photos, renders, notes)
 private/
+
+# working notes and handouts kept next to the site but never published
+GSE/
