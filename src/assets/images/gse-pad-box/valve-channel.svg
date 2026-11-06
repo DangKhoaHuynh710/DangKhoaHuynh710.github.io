@@ -2,68 +2,68 @@
   <title>One valve channel: signal chain and delay budget</title>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b2"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
     </marker>
     <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#4cc9f0"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#0b5fa5"/>
     </marker>
   </defs>
-  <rect width="1200" height="440" fill="#0b0f17"/>
+  <rect width="1200" height="440" fill="#ffffff"/>
 
-  <g stroke="#9aa4b2" stroke-width="2.5" fill="none">
+  <g stroke="#6b7280" stroke-width="2.5" fill="none">
     <line x1="212" y1="125" x2="246" y2="125" marker-end="url(#a)"/>
     <line x1="442" y1="125" x2="476" y2="125" marker-end="url(#a)"/>
     <line x1="682" y1="125" x2="716" y2="125" marker-end="url(#a)"/>
     <line x1="922" y1="125" x2="956" y2="125" marker-end="url(#a)"/>
   </g>
-  <path d="M1010 174 V 314" stroke="#4cc9f0" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
-  <text x="1022" y="250" font-size="15" fill="#4cc9f0">valve current</text>
-  <path d="M600 365 H 120 V 174" stroke="#4cc9f0" stroke-width="2.5" fill="none" marker-end="url(#b)"/>
+  <path d="M1010 174 V 314" stroke="#0b5fa5" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+  <text x="1022" y="250" font-size="15" fill="#0b5fa5">valve current</text>
+  <path d="M600 365 H 120 V 174" stroke="#0b5fa5" stroke-width="2.5" fill="none" marker-end="url(#b)"/>
 
-  <g stroke-width="3" fill="#141a24">
-    <rect x="30" y="80" width="182" height="92" rx="10" stroke="#9aa4b2"/>
-    <rect x="250" y="80" width="192" height="92" rx="10" stroke="#9ef01a"/>
-    <rect x="480" y="80" width="202" height="92" rx="10" stroke="#9ef01a"/>
-    <rect x="720" y="80" width="202" height="92" rx="10" stroke="#9ef01a"/>
-    <rect x="960" y="80" width="200" height="92" rx="10" stroke="#9aa4b2" stroke-dasharray="6 5"/>
-    <rect x="600" y="316" width="460" height="92" rx="10" stroke="#9ef01a"/>
+  <g stroke-width="3" fill="#f5f6f8">
+    <rect x="30" y="80" width="182" height="92" rx="10" stroke="#6b7280"/>
+    <rect x="250" y="80" width="192" height="92" rx="10" stroke="#3a7d00"/>
+    <rect x="480" y="80" width="202" height="92" rx="10" stroke="#3a7d00"/>
+    <rect x="720" y="80" width="202" height="92" rx="10" stroke="#3a7d00"/>
+    <rect x="960" y="80" width="200" height="92" rx="10" stroke="#6b7280" stroke-dasharray="6 5"/>
+    <rect x="600" y="316" width="460" height="92" rx="10" stroke="#3a7d00"/>
   </g>
 
-  <g fill="#e6edf3" text-anchor="middle">
+  <g fill="#1b1b1b" text-anchor="middle">
     <text x="121" y="116" font-size="20" font-weight="600">Controller</text>
-    <text x="121" y="142" font-size="15" fill="#9aa4b2">STM32H755 PWM</text>
-    <text x="121" y="161" font-size="15" fill="#9aa4b2">or LabJack T7</text>
+    <text x="121" y="142" font-size="15" fill="#6b7280">STM32H755 PWM</text>
+    <text x="121" y="161" font-size="15" fill="#6b7280">or LabJack T7</text>
 
     <text x="346" y="116" font-size="20" font-weight="600">Controller select</text>
-    <text x="346" y="142" font-size="15" fill="#9aa4b2">2:1 multiplexer</text>
-    <text x="346" y="161" font-size="15" fill="#9aa4b2">SN74LVC157A</text>
+    <text x="346" y="142" font-size="15" fill="#6b7280">2:1 multiplexer</text>
+    <text x="346" y="161" font-size="15" fill="#6b7280">SN74LVC157A</text>
 
     <text x="581" y="116" font-size="20" font-weight="600">Gate driver</text>
-    <text x="581" y="142" font-size="15" fill="#9aa4b2">TLP152 optocoupler</text>
-    <text x="581" y="161" font-size="15" fill="#9aa4b2">3.3 V logic to 12 V gate</text>
+    <text x="581" y="142" font-size="15" fill="#6b7280">TLP152 optocoupler</text>
+    <text x="581" y="161" font-size="15" fill="#6b7280">3.3 V logic to 12 V gate</text>
 
     <text x="821" y="116" font-size="20" font-weight="600">Power MOSFET</text>
-    <text x="821" y="142" font-size="15" fill="#9aa4b2">TK110E10PL</text>
-    <text x="821" y="161" font-size="15" fill="#9aa4b2">low-side, 7 A design</text>
+    <text x="821" y="142" font-size="15" fill="#6b7280">TK110E10PL</text>
+    <text x="821" y="161" font-size="15" fill="#6b7280">low-side, 7 A design</text>
 
     <text x="1060" y="116" font-size="20" font-weight="600">Valve coil</text>
-    <text x="1060" y="142" font-size="15" fill="#9aa4b2">24 V or 12 V</text>
-    <text x="1060" y="161" font-size="15" fill="#9aa4b2">ms mechanical response</text>
+    <text x="1060" y="142" font-size="15" fill="#6b7280">24 V or 12 V</text>
+    <text x="1060" y="161" font-size="15" fill="#6b7280">ms mechanical response</text>
 
     <text x="830" y="352" font-size="20" font-weight="600">Current and voltage sense</text>
-    <text x="830" y="378" font-size="15" fill="#9aa4b2">shunt resistor and sense amplifier</text>
-    <text x="830" y="397" font-size="15" fill="#9aa4b2">on every channel</text>
+    <text x="830" y="378" font-size="15" fill="#6b7280">shunt resistor and sense amplifier</text>
+    <text x="830" y="397" font-size="15" fill="#6b7280">on every channel</text>
   </g>
 
   <!-- delay budget -->
   <g text-anchor="middle" font-size="17">
-    <text x="346" y="210" fill="#9ef01a" font-weight="600">6.4 ns</text>
-    <text x="581" y="210" fill="#9ef01a" font-weight="600">170–190 ns</text>
-    <text x="821" y="210" fill="#9ef01a" font-weight="600">40–90 ns (est.)</text>
+    <text x="346" y="210" fill="#3a7d00" font-weight="600">6.4 ns</text>
+    <text x="581" y="210" fill="#3a7d00" font-weight="600">170–190 ns</text>
+    <text x="821" y="210" fill="#3a7d00" font-weight="600">40–90 ns (est.)</text>
   </g>
-  <path d="M250 228 V 238 H 922 V 228" stroke="#9ef01a" stroke-width="2" fill="none"/>
-  <text x="586" y="266" text-anchor="middle" font-size="17" fill="#c9d1d9">command to valve power: under 0.3 µs, worst case from datasheets</text>
-  <text x="360" y="356" text-anchor="middle" font-size="15" fill="#4cc9f0">reports back to the microcontroller</text>
+  <path d="M250 228 V 238 H 922 V 228" stroke="#3a7d00" stroke-width="2" fill="none"/>
+  <text x="586" y="266" text-anchor="middle" font-size="17" fill="#3d434b">command to valve power: under 0.3 µs, worst case from datasheets</text>
+  <text x="360" y="356" text-anchor="middle" font-size="15" fill="#0b5fa5">reports back to the microcontroller</text>
 
-  <text x="30" y="44" font-size="17" fill="#9aa4b2">One of 12 channels on the Valve Control Board</text>
+  <text x="30" y="44" font-size="17" fill="#6b7280">One of 12 channels on the Valve Control Board</text>
 </svg>

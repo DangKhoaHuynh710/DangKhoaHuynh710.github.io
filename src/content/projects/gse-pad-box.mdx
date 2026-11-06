@@ -2,12 +2,21 @@
 title: Launch pad electronics for Project Kookaburra
 role: Ground Support Equipment (GSE) Co-Lead, USYD Rocketry Team
 dates: July 2026–Present
-summary: Leading the redesign of a rocket team's launch pad electronics into a modular set of custom boards on one RS-485 bus, and designing its 12-channel valve control board and vehicle umbilical board.
+summary: Leading the redesign of a rocket team's launch pad electronics into a modular system of custom boards on one RS-485 bus, and designing its 12-channel valve control board and vehicle umbilical board.
 cover: valve-control-board-cover.png
 coverAlt: 3D render of the Valve Control Board V1.0 from above. A black PCB with angled lower edges, an STM32 microcontroller in the centre, two diagonal rows of power MOSFET channels and latching connectors around the edges.
 cleared: true
 featured: true
 order: 2
+highlights:
+  - label: Status
+    value: Designed, not yet built
+  - label: Valve channels
+    value: 12 × PWM, 7 A each
+  - label: Boards
+    value: 2 designed, 3 briefed
+  - label: Field bus
+    value: RS-485, Modbus RTU
 ---
 
 import Figure from '../../components/Figure.astro';
@@ -18,32 +27,32 @@ import valveChannel from '../../assets/images/gse-pad-box/valve-channel.svg';
 
 ## Overview
 
-Before the team's rocket can launch, equipment on the ground has to fill its tank with liquid nitrous oxide, the oxidiser, watch pressures and weights during the fill, open and close valves, disconnect the fill line and talk to the vehicle's flight computers. Operators do all of this from a flight line several hundred metres away. This is ground support equipment (GSE), and the pad box is its weatherproof electronics enclosure at the launch pad.
+Project Kookaburra is the USYD Rocketry Team's next rocket. Before it can launch, equipment at the pad has to fill it with liquid nitrous oxide, operate the ground valves, disconnect the fill line and stay connected to the rocket's flight computers, all controlled from a flight line several hundred metres away. This is the ground support equipment (GSE), and its electronics live in the pad box, a weatherproof enclosure at the launch pad.
 
-On Galah, the USYD Rocketry Team's 2026 rocket, the pad box was built around an off-the-shelf data acquisition unit, a LabJack T7, with screw terminals and solid-state relay modules. A full launch campaign showed its limits. For Project Kookaburra, the team's next rocket, I am leading its replacement: a modular system of boards the team designs itself, all on one wired bus.
+On Galah, the team's 2026 rocket, the pad box was built around an off-the-shelf data acquisition unit, a LabJack T7, with screw terminals and solid-state relay modules. As GSE co-lead I am replacing it with team-designed boards on a single RS-485 bus. I designed two of them: the Valve Control Board and the Umbilical and Quick Disconnect (QD) Board.
 
-**Status, November 2026.** I have designed two of those boards from schematic to 4-layer printed circuit board (PCB) layout, and both went through the team's Critical Design Review. They have not been built or tested yet, so every number on this page is a design value worked out from manufacturers' datasheets, not a measurement.
+**Status (November 2026):** both boards have complete schematics and 4-layer printed circuit board (PCB) layouts and went through the team's Critical Design Review. They have not been built or tested, so every number on this page is a design value from manufacturers' datasheets.
 
 ## My role
 
-As GSE co-lead I lead the electrical, electronics and software work for the team's ground systems, and coordinate their requirements, design reviews, testing and documentation. For the pad box I:
+As GSE co-lead I lead the electrical, electronics and software work for the team's ground systems, and coordinate their requirements, design reviews, testing and documentation. On the pad box:
 
-- defined the new electronics architecture and the design rules every board follows;
-- designed two of its boards myself, the Valve Control Board and the Umbilical and Quick Disconnect (QD) Board, in Altium Designer;
-- wrote the design briefs that new engineers used to design the other three: the Power Distribution Board, the Command Hub and the Sensor Nodes;
-- wrote the team's PCB Schematic Design Guide (Rev 0.1, September 2026) and a new-member induction task: a single-channel valve switching board that covers MOSFET versus relay selection, flyback and overcurrent protection, indicator LEDs, current sensing and connector choice;
-- led the electronics section of the team's Critical Design Review, covering the architecture, why it changed, and the design of my two boards.
+- **Architecture:** defined the new system and the design rules every board follows
+- **Board design:** the Valve Control Board and the Umbilical and QD Board, from schematic to 4-layer layout in Altium Designer
+- **Briefs for new engineers:** wrote the design briefs they used for the Power Distribution Board, Command Hub and Sensor Nodes
+- **Team resources:** wrote the team's PCB Schematic Design Guide (Rev 0.1, September 2026) and a new-member induction task, a single-channel valve switching board covering MOSFET versus relay selection, flyback and overcurrent protection, current sensing and connector choice
+- **Design review:** led the electronics section of the team's Critical Design Review
 
 ## Photos
 
-The boards have not been built yet, so these are 3D renders of the finished layouts.
+The boards have not been built yet, so these are 3D renders of the completed layouts.
 
 <Figure
   src={valveRenders}
   n={1}
   wide
   alt="Two 3D renders of the Valve Control Board V1.0, from above and at an angle. A black PCB with angled lower edges carries an STM32 microcontroller in the centre, two diagonal rows of power MOSFET channels on shared heatsinks, a microSD card slot, a D-sub connector for the fallback controller, an RJ45 jack and latching power connectors around the edges."
-  caption="The Valve Control Board V1.0. The 12 MOSFET channels run in two diagonal rows along shared heatsinks."
+  caption="Valve Control Board V1.0. The 12 MOSFET channels run in two diagonal rows along shared heatsinks."
 />
 
 <Figure
@@ -51,109 +60,109 @@ The boards have not been built yet, so these are 3D renders of the finished layo
   n={2}
   wide
   alt="Two 3D renders of the Umbilical and QD Board V1.0, from above and at an angle. A black rectangular PCB carries an STM32 microcontroller, two large relays, an RJ45 jack and white latching connectors along the edges labelled for the main oxidiser valve, vent, dump, payload and quick-disconnect lines."
-  caption="The Umbilical and QD Board V1.0, which links the pad box to the rocket. The two large relays reverse the quick-disconnect actuator and switch payload charging."
+  caption="Umbilical and QD Board V1.0, the electrical link between the pad box and the rocket. The two large relays reverse the quick-disconnect actuator and switch payload charging."
 />
 
 ## Design decisions
 
-### One bus, one cable, many small boards
+### System architecture
 
-Instead of one general-purpose data acquisition unit, every function gets a small board of its own, and every board follows the same rules:
+Each function now has its own small board, and every board follows the same rules:
 
-- **One field bus.** Each board talks RS-485, a robust long-distance wired standard, using Modbus RTU, a simple industrial protocol. Each has its own point-to-point link from the Command Hub. Any new board that speaks RS-485 plugs straight in, so new features no longer depend on finding an off-the-shelf board that fits.
-- **One trunk cable.** A single RJ45 cable carries both the RS-485 link and 12 V power to each remote board.
-- **Digitise at the sensor.** Sensor Nodes sit next to the pressure, load-cell and temperature sensors and send numbers, not analogue signals, so long cable runs no longer pick up noise.
-- **Latching, keyed connectors everywhere,** with a different connector family for each voltage, so cables cannot work loose or go into the wrong socket.
-- **A staged transition.** The old LabJack stays connected as a fallback while the new boards are brought up.
+- **One field bus:** every board talks RS-485, a robust long-distance wired standard, using Modbus RTU, a simple industrial protocol, over its own link from the Command Hub. Any new board that speaks RS-485 plugs straight into the system, so new features no longer depend on finding an off-the-shelf board that fits.
+- **One trunk cable:** a single RJ45 cable carries both the RS-485 link and 12 V power to each remote board.
+- **Digitise at the sensor:** Sensor Nodes sit next to the pressure, load-cell and temperature sensors and send digital readings, so long cable runs no longer add noise to analogue signals.
+- **Connectors:** every connector latches and is keyed, with a different connector family for each voltage, so cables cannot work loose or be plugged into the wrong socket.
+- **Migration:** the LabJack stays connected as a fallback while the new boards are brought up.
 
 <Figure
   src={architecture}
   n={3}
   wide
   alt="Block diagram of the Kookaburra pad box electronics. The launch controller at the flight line links wirelessly to the pad box mini-PC, which connects over USB to the Command Hub. The hub runs one RS-485 bus each to the Valve Control Board, the Umbilical and QD Board and the Sensor Nodes. The Valve Control Board drives 12 ground fill-system valves and passes valve power to the Umbilical and QD Board, which connects to the launch vehicle's two flight computers, its main oxidiser, vent and dump valves and the fill-line quick disconnect. A Power Distribution Board supplies protected 5, 12, 24 and 48 V rails. The two boards I designed are outlined in green, the three I briefed in blue."
-  caption="The new pad box electronics. Green: the two boards I designed. Blue: the boards I wrote briefs for, designed by new team members. Grey: other equipment."
+  caption="Pad box electronics. Green: boards I designed. Blue: boards I wrote the briefs for, designed by new team members. Grey: other equipment."
 />
 
-### Safe by default
+### Safety
 
-The pad box handles pressurised oxidiser and an igniter, so the rule behind every board is that hardware sets every safe default, and firmware can only change state after boot. The system is designed to competition safety rules.
+The pad box controls pressurised oxidiser and the igniter, so hardware sets every safe default and firmware can only change state after boot. The system is designed to competition safety rules.
 
-- **An emergency stop and an arming key in hardware.** Both sit in series on the rail that powers the valve coils, so opening either one cuts power to every valve, whatever the firmware is doing.
-- **Outputs fail open.** If a channel loses its control signal or its gate-drive supply, the MOSFET's gate is pulled low and the output turns off. The gates are also held off at power-up.
-- **An isolated igniter path.** The igniter channel is kept separate from the rest of the board.
-- **Two steps to power a rail.** Each Power Distribution Board rail needs both a physical latch button and a firmware command to turn on, so firmware alone cannot enable a rail.
+- **Emergency stop and arming key:** both are in series on the rail that powers the valve coils. Opening either one removes power from every valve, independent of the firmware.
+- **Outputs fail off:** if a channel loses its control signal or gate-drive supply, the MOSFET gate is pulled low and the output switches off. Gates are also held off at power-up.
+- **Igniter isolation:** the igniter channel is isolated from the rest of the board.
+- **Power rails:** each Power Distribution Board rail needs both a physical latch button and a firmware command to switch on.
 
-### Valve channels: MOSFETs, not relays
+### Valve Control Board
 
-The Valve Control Board switches power to every valve in the ground fill system, the umbilical release and the igniter, and confirms each one is energised.
+The Valve Control Board switches power to the ground fill-system valves, the umbilical release and the igniter, and measures what each channel actually draws.
 
 | | Valve Control Board |
 |---|---|
 | Channels | 12: nine at 24 V and three at 12 V |
-| Switching | Low-side N-channel MOSFET with optocoupler gate driver, PWM on every channel |
+| Switching | Low-side N-channel MOSFET with optocoupler gate driver and PWM |
 | Channel current | Designed for 7 A |
 | Control | Pad box mini-PC over RS-485, or the LabJack T7, selected by a jumper |
 | Protection | Fusing, flyback and transient-voltage-suppression (TVS) protection |
 | Sensing | Shunt-based current and voltage measurement on every channel |
+| Diagnostics | LED per channel, RGB status LED, fault buzzer, test points, microSD logging, battery-backed clock and error log |
 | Microcontroller | STM32H755, dual-core Arm Cortex-M7 and Cortex-M4 |
 
-- **MOSFETs instead of relays.** A MOSFET can be switched with pulse-width modulation (PWM) to set how much power a valve gets, which the new solenoid valves need. It also switches far faster than a relay module, and carries the vent valve's 6.1 A with room to spare. The Toshiba TK110E10PL has at most 10.7 mΩ on-resistance, for a calculated loss of about 0.52 W per MOSFET at 7 A.
-- **An optocoupler as the gate driver.** The MOSFET is only fully on with a 10 V gate, so a 3.3 V microcontroller pin would leave it half-on and overheating. A Toshiba TLP152 drives the gate to about 12 V with around 1 A of peak current, which keeps the PWM edges sharp. It also stops a failed MOSFET from feeding 24 V back into the logic.
-- **A timing budget from the datasheets.** I worked out the delay from command to valve power stage by stage and drew it as a datasheet-style timing diagram. The total is under 0.3 µs, so the valve's own mechanical response, in milliseconds, dominates.
-- **Measuring what each valve actually did.** The old system only showed what had been commanded. A shunt and sense amplifier on every channel report the current each valve really draws, enough to tell a working valve from an open or shorted coil.
-- **Designed for a hot launch site.** The competition site reaches about 45 to 50 °C, so the MOSFETs share heatsinks.
-- **The old hardware as a fallback.** A 2:1 multiplexer lets the team switch control back to the LabJack without rewiring, for under 10 ns of extra delay.
-- **Easy to debug in the field.** Every channel has a status LED, and the board has an RGB status LED, a fault buzzer, test points and a Serial Wire Debug (SWD) programming header. A microSD card logs valve states and readings, and a coin cell keeps the real-time clock and an error log alive through power loss.
+- **MOSFETs instead of relays:** the new solenoid valves need pulse-width modulation (PWM) to set their position, which the old on/off relay modules could not provide. The Toshiba TK110E10PL MOSFET handles the vent valve's 6.1 A with margin; with a maximum on-resistance of 10.7 mΩ, its calculated conduction loss is about 0.52 W at 7 A.
+- **Optocoupler gate drive:** the MOSFET needs a 10 V gate to switch fully on, which a 3.3 V microcontroller pin cannot provide. A Toshiba TLP152 drives the gate to about 12 V with around 1 A peak current for clean PWM edges, and isolates the logic from the 24 V side if a MOSFET fails.
+- **Timing budget:** I calculated the delay through each stage from datasheet worst-case values and drew it as a datasheet-style timing diagram. Command to valve power takes under 0.3 µs, well below the valve's millisecond mechanical response.
+- **Measured feedback:** a shunt and sense amplifier on each channel report the current each valve draws, enough to distinguish a working valve from an open or shorted coil. The old system only showed what had been commanded.
+- **Thermal design:** the launch site reaches 45 to 50 °C ambient, so the MOSFETs are mounted on shared heatsinks.
+- **Fallback control:** a 2:1 multiplexer hands control back to the LabJack without rewiring, adding under 10 ns of delay.
 
 <Figure
   src={valveChannel}
   n={4}
   wide
   alt="Signal chain for one valve channel. The controller, either the STM32H755 or the LabJack T7, feeds a 2:1 multiplexer (6.4 ns), then a TLP152 optocoupler gate driver (170 to 190 ns), then a TK110E10PL power MOSFET (40 to 90 ns, estimated), then the valve coil. The total from command to valve power is under 0.3 microseconds. A shunt and sense amplifier on the valve current report back to the microcontroller."
-  caption="One of the 12 valve channels, with the delay of each stage taken from worst-case datasheet values. The MOSFET's delay is an estimate."
+  caption="Signal chain for one valve channel, with worst-case datasheet delays for each stage. The MOSFET delay is an estimate."
 />
 
-### A protected link to the vehicle
+### Umbilical and QD Board
 
-The Umbilical and QD Board is the pad box's electrical link to the rocket, right up to the moment of separation. It sits in its own enclosure.
+The Umbilical and QD Board is the pad box's electrical link to the rocket until separation. It sits in its own enclosure.
 
 | | Umbilical and QD Board |
 |---|---|
-| Vehicle link | USB host to the vehicle's two flight computers, forward and aft |
+| Vehicle link | USB host to the rocket's two flight computers, forward and aft |
 | Pad box link | One RS-485 channel to the Command Hub |
-| Vehicle valves | Carries power for the main oxidiser, vent and dump valves from the Valve Control Board, and monitors each line's voltage |
-| Quick disconnect | Extends and retracts the fill-line disconnect actuator, from the flight line or from switches on the enclosure |
+| Vehicle valves | Carries main oxidiser, vent and dump valve power from the Valve Control Board and monitors each line's voltage |
+| Quick disconnect | Extends and retracts the fill-line disconnect actuator, commanded from the flight line or from switches on the enclosure |
 | Charging | 5 V to the forward and aft avionics; 24 V to the payload's three-cell lithium-ion pack, switched by a relay |
 | Input protection | Resettable fuse, ideal diode and TVS diode on each input |
 
-- **Two USB hosts from one microcontroller.** The flight computers are USB devices, so the board has to be the host for both at once. The STM32H755 has two USB controllers, so one chip handles both.
-- **An ideal diode instead of a Schottky diode.** A TI LM73100 protects each input. It survives a reversed input down to −15 V and drops only about 28 mΩ times the load current, far less than a diode. I set its voltage window with resistor dividers: the 12 V input only turns on between about 7.4 and 15.5 V, and the 5 V input between about 3.6 and 6.5 V. If the wrong supply is plugged in, such as 12 V into the 5 V input, the output stays off and the chip survives up to 28 V. A capacitor makes the output rise at about 2 V/ms, which keeps start-up current into the board's capacitors to tens of milliamps.
-- **Reversing the actuator with a relay.** A double-pole, double-throw relay that breaks before it makes reverses the disconnect actuator's polarity without ever shorting the supply.
-- **High-side switching for payload charging.** The Valve Control Board switches on the ground side, but the payload battery needs its ground connected permanently. A relay on this board turns the switched line into a high-side switch, so the pad box can stop charging even though the payload board cannot talk to it.
-- **A pad-side override.** A push-button and a toggle switch on the enclosure let the pad crew run the disconnect during setup without waiting for a command from the flight line.
-- **Connectors grouped to match the vehicle.** Power outputs use dual-row 4-pin connectors, grouping rails in fours to match each magnetic connector on the vehicle side and keeping the board compact.
+- **Two USB hosts, one microcontroller:** both flight computers are USB devices, so the board must host them simultaneously. The STM32H755 has two USB controllers, so a single chip serves both.
+- **Ideal diode protection:** a TI LM73100 on each input survives reverse polarity down to −15 V and drops only about 28 mΩ times the load current, far less than a Schottky diode. I set its voltage window with resistor dividers: the 12 V input operates only between about 7.4 and 15.5 V, and the 5 V input between 3.6 and 6.5 V. If the wrong supply is connected, for example 12 V into the 5 V input, the output stays off and the chip tolerates up to 28 V. A soft-start capacitor limits the output rise to about 2 V/ms, keeping inrush current to tens of milliamps.
+- **Actuator reversal:** a double-pole, double-throw relay with break-before-make contacts reverses the disconnect actuator without ever shorting the supply.
+- **Payload charging:** the payload battery needs a permanent ground, but the Valve Control Board switches on the ground side. A relay on this board converts that output into a high-side switch, so the pad box can stop charging even though the payload board cannot communicate with it.
+- **Pad-side control:** a push-button and toggle switch on the enclosure let the pad crew operate the disconnect during setup without a flight-line command.
+- **Connector grouping:** power outputs use dual-row 4-pin connectors, grouped to match the terminal count of each magnetic connector on the rocket side.
 
 ## Testing and what broke
 
-Neither board has been built yet, so what broke is the old pad box. Each problem found while running it through a full launch campaign became a requirement for the new design.
+The boards have not been built yet. Each problem found while running the old pad box through a full launch campaign became a requirement for the new design:
 
-| What broke on the old pad box | What the new design does |
+| Problem with the old pad box | Response in the new design |
 |---|---|
-| The relay modules could not drive the new valves. The vent valve needs about 6.1 A at 24 V, but the modules were limited to 3 A and could only switch fully on or off. | MOSFET channels designed for 7 A, with PWM on every channel. |
-| Screw-terminal wires worked loose during operations, losing sensor readings or valve control. | Latching, keyed connectors everywhere, rated for the actual crimp terminal and wire gauge. |
-| The software showed what had been commanded, not what the hardware did. | Current and voltage measured on every valve channel. |
-| On past trips, a fault in the pad box damaged a flight computer, and a flight computer fault damaged the pad box. | Fusing, flyback and TVS protection on the valve board, ideal-diode protection on the vehicle link, and electronic fuses (eFuses) on the power distribution rails. |
-| About AUD 1,100 per LabJack T7 and AUD 66.47 per relay module, with at least 10 channels needed. | Boards the team designs and owns. |
+| The solid-state relay modules were limited to 3 A and on/off switching, but the new vent valve draws about 6.1 A at 24 V. | MOSFET channels designed for 7 A, with PWM on every channel. |
+| Screw-terminal wires worked loose during operations, dropping sensor readings or valve control. | Latching, keyed connectors throughout, rated for the actual crimp terminal and wire gauge. |
+| The control software showed what had been commanded, not what the hardware did. | Current and voltage measured on every valve channel. |
+| On past trips, a pad box fault damaged a flight computer, and a flight computer fault damaged the pad box. | Fusing, flyback and TVS protection on the valve board, ideal diodes on the vehicle link and electronic fuses (eFuses) on the power rails. |
+| About AUD 1,100 per LabJack T7 and AUD 66.47 per relay module, with at least 10 channels needed. | Custom boards, with parts selected against datasheets and supplier availability. |
 
 {/* TODO: add the bring-up and test plan once the boards are ordered; replace this section's framing after first tests. */}
-Fabrication, bring-up and testing come next.
+Fabrication and bring-up are next.
 
 ## Result
 
-So far, both boards are fully designed, from schematic to 4-layer layout, and were reviewed at the team's Critical Design Review. New team members designed the Power Distribution Board, Command Hub and Sensor Nodes from my briefs. I also wrote the team's PCB Schematic Design Guide and induction task, which are meant to be maintained by each project and passed on to later leads.
+Both boards are fully designed and passed through the team's Critical Design Review. New team members designed the Power Distribution Board, Command Hub and Sensor Nodes from my briefs, and the team now has a PCB design guide and induction task intended to be handed on to future leads.
 
 {/* TODO: update with fabrication and test results. */}
 
 ## Links
 
-There are no public documents for this project yet.
+No public documents are available for this project yet.

@@ -38,6 +38,8 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     order: z.number().optional(),
     links: z.array(z.object({ label: z.string(), url: z.url() })).optional(),
+    // Up to four short key facts shown under the title, e.g. { label: 'Result', value: '1st place' }.
+    highlights: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).max(4).optional(),
   }),
 });
 

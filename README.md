@@ -155,13 +155,13 @@ From CLAUDE.md A6. Items marked *auto* are enforced by `npm run build`.
 
 Clean, type-led layout with system fonts and no client-side JavaScript.
 
-| | Light mode | Dark mode |
+| | Light mode (default) | Dark mode (header toggle) |
 |---|---|---|
 | Background | `#fbfaf8` | `#0b0f17` |
 | Links | `#0b5fa5` | `#4cc9f0` |
 | Signature green | `#3a7d00` | `#9ef01a` |
 
-The green is used only on dates, figure numbers, the active nav item and the short rule under each page heading. The home page hero has a CSS-only starfield and shooting stars in dark mode; they switch off for people with reduced motion enabled. All colour tokens are at the top of `src/styles/global.css`.
+The green is used only on dates, figure numbers, the active nav item and the short rule under each page heading. Light mode is the default for every visitor; dark mode is opt-in through the header toggle and remembered in that browser. The home page hero has a CSS-only starfield and shooting stars in dark mode; they switch off for people with reduced motion enabled. Project pages use a centred reading column, with wide figures centred around it, and an optional key-facts strip (`highlights` in frontmatter). All colour tokens are at the top of `src/styles/global.css`.
 
 ---
 

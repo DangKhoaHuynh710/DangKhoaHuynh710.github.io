@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { entry, headings } = Astro.props;
-const { title, role, dates, summary, coverAlt, links } = entry.data;
+const { title, role, dates, summary, coverAlt, links, highlights } = entry.data;
 const cover = await getCover(entry);
 
 // Enforce the fixed section order (CLAUDE.md A2/A4). Warn in dev, never in prod.
@@ -51,6 +51,16 @@ if (problems.length && import.meta.env.DEV) {
       <h1>{title}</h1>
       <p class="meta"><span>{role}</span><span class="dates">{dates}</span></p>
       <p>{summary}</p>
+      {highlights && highlights.length > 0 && (
+        <dl class="highlights">
+          {highlights.map((h) => (
+            <div>
+              <dt>{h.label}</dt>
+              <dd>{h.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
       <figure class="figure">
         <Image
           src={cover}

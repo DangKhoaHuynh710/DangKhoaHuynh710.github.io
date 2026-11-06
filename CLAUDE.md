@@ -89,9 +89,9 @@ Body of each project file uses `##` headings in exactly the order listed in A2. 
 
 ## A5. Non-functional requirements
 
-- Static output only. No client-side JS unless a component needs it; no analytics, no cookies, no comments, no third-party fonts loaded from a CDN (self-host or use system font stack).
+- Static output only. No client-side JS unless a component needs it (the only script is the dark-mode toggle); no analytics, no cookies, no comments, no third-party fonts loaded from a CDN (self-host or use system font stack).
 - Responsive; check at 375 px width first, then desktop. Recruiters open this from email on a phone.
-- Light and dark mode via `prefers-color-scheme` only; no toggle needed.
+- Light mode by default for every visitor (decided 2026-11-06: more standard for professional readers). Dark mode, with the hero starfield, only when the visitor chooses it with the header toggle; the choice is remembered in that browser.
 - Accessibility: every image needs alt text that describes the hardware (not "image of board"); one `h1` per page; heading levels in order; colour contrast at least WCAG AA.
 - Print stylesheet: a project page prints cleanly on A4 — hide nav/footer links, show URLs after external links, no dark background.
 - Lighthouse targets on the home page: performance ≥ 95, accessibility 100.

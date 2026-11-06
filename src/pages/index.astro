@@ -2,10 +2,8 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import Figure from '../components/Figure.astro';
 import { SITE } from '../lib/site';
 import { isVisible } from '../lib/visibility';
-import portrait from '../assets/images/about/portrait.svg';
 
 const featured = (await getCollection('projects', (p) => isVisible(p) && p.data.featured))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || b.data.dates.localeCompare(a.data.dates))
@@ -35,7 +33,7 @@ const bright = stars(16, 20250101, ' 3px 1px');
 ---
 
 <Base title={SITE.title}>
-  <section class="hero intro">
+  <section class="hero">
     <div class="sky" aria-hidden="true">
       <i class="stars-far" style={`box-shadow: ${far};`}></i>
       <i class="stars" style={`box-shadow: ${near};`}></i>
@@ -50,20 +48,18 @@ const bright = stars(16, 20250101, ' 3px 1px');
         build and test flight and ground electronics: PCBs, firmware and cable harnesses for rocket payloads,
         launch-pad control systems and an electric race car.
       </p>
-      <p>TODO: one more sentence if wanted, drafted and reviewed by me.</p>
+      <p>
+        Most recently I was the primary electronics engineer for <a href="/projects/rock-daisy/">Rock Daisy</a>, which
+        won the SDL Payload Challenge at IREC 2026. I now co-lead ground support equipment for the team's next
+        rocket, <a href="/projects/gse-pad-box/">Project Kookaburra</a>.
+      </p>
       <ul class="intro-links">
         <li><a href="/resume.pdf">Resume (PDF)</a></li>
         <li><a href={SITE.linkedin} rel="me noopener">LinkedIn</a></li>
         <li><a href={`mailto:${SITE.email}`}>Email</a></li>
       </ul>
     </div>
-    <Figure
-      src={portrait}
-      alt="TODO: portrait photo of Dang Khoa Huynh"
-      loading="eager"
-      widths={[320, 640]}
-      sizes="(min-width: 720px) 16rem, 100vw"
-    />
+    {/* TODO: add a portrait photo here once available (src/assets/images/about/). */}
   </section>
 
   <section>

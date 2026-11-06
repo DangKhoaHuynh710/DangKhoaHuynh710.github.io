@@ -30,7 +30,13 @@ const emailText = entityEncode(SITE.email);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="light" />
+    <script is:inline>
+      // Light by default. Apply a saved dark-mode choice before first paint.
+      try {
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+      } catch (e) {}
+    </script>
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -40,17 +46,43 @@ const emailText = entityEncode(SITE.email);
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href="/">{SITE.name}</a>
-        <nav aria-label="Main">
-          <ul class="nav">
-            {NAV.map((item) => (
-              <li>
-                <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div class="header-tools">
+          <nav aria-label="Main">
+            <ul class="nav">
+              {NAV.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Dark mode" aria-pressed="false" hidden>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+          </button>
+        </div>
       </div>
     </header>
+    <script is:inline>
+      // Dark-mode toggle. The only script on the site; without it, visitors get light mode.
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function sync() {
+          button.setAttribute('aria-pressed', root.dataset.theme === 'dark' ? 'true' : 'false');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var dark = root.dataset.theme !== 'dark';
+          if (dark) root.dataset.theme = 'dark';
+          else delete root.dataset.theme;
+          try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
 
     <main class={`wrap ${mainClass}`.trim()}>
       <slot />
