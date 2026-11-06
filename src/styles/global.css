@@ -17,7 +17,7 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --measure: 68ch;
-  --wide: 72rem;
+  --wide: 60rem; /* one frame width for header, footer, cards and wide figures */
   --gutter: clamp(1rem, 4vw, 2rem);
 
   --step--1: 0.9rem;
@@ -179,6 +179,7 @@ main > .prose { margin-inline: auto; }
 }
 
 main {
+  container-type: inline-size; /* lets wide figures size to the frame (cqi) */
   flex: 1;
   padding-block: var(--space-4) var(--space-5);
 }
@@ -219,13 +220,12 @@ main {
 .cards {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: 1fr;
+  /* as many columns as fit; one or two cards still fill the row */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
   margin: 0;
   padding: 0;
   list-style: none;
 }
-@media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
 .card {
   display: block;
@@ -356,9 +356,18 @@ main {
 .figure figcaption .fig-n { font-weight: 600; color: var(--signature); }
 
 /* Wide figures extend past the (centred) text column on large screens, centred on it. */
+/* In project pages a figure is as wide as its image (capped by its column), centred,
+   and its caption wraps to the image width instead of stretching the figure. */
+.prose .figure {
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.prose .figure figcaption { contain: inline-size; }
 .prose .figure.wide {
-  width: min(calc(100vw - 2 * var(--gutter)), calc(var(--wide) - 2 * var(--gutter)));
-  max-width: none;
+  max-width: min(calc(100vw - 2 * var(--gutter)), calc(var(--wide) - 2 * var(--gutter)));
+  max-width: 100cqi;
+  margin-inline: 0;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -384,6 +393,9 @@ main {
   border: 1px solid var(--border);
   margin: var(--space-3) 0 var(--space-1);
 }
+/* Images and video inside figures sit centred in their frame. */
+.prose .figure img,
+.figure.video video { margin: 0 auto; }
 
 /* Key facts strip under a project title */
 .highlights {
@@ -465,7 +477,7 @@ main {
   @page { size: A4; margin: 18mm; }
   body { font-size: 11pt; }
   .site-header .nav, .site-footer ul, .no-print, .dev-warning, .sky, .figure.video video, .theme-toggle { display: none !important; }
-  .prose .figure.wide { width: 100%; left: 0; transform: none; }
+  .prose .figure, .prose .figure.wide { width: auto; max-width: 100%; left: 0; transform: none; margin-inline: 0; }
   main > .prose { max-width: none; }
   .hero { margin: 0; padding: 0; }
   .site-header, main { padding: 0; }

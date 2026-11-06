@@ -102,15 +102,15 @@ The Valve Control Board switches power to the ground fill-system valves, the umb
 | Switching | Low-side N-channel MOSFET with optocoupler gate driver and PWM |
 | Channel current | Designed for 7 A |
 | Control | Pad box mini-PC over RS-485, or the LabJack T7, selected by a jumper |
-| Protection | Fusing, flyback and transient-voltage-suppression (TVS) protection |
-| Sensing | Shunt-based current and voltage measurement on every channel |
+| Protection | Time-lag ceramic fuses (10 A and 6.3 A) and transient-voltage-suppression (TVS) diodes on the 24 V and 12 V rails; resettable fuse and TVS diode on the 5 V rail; flyback protection on the valve outputs |
+| Sensing | TI INA237 with a 12 mΩ shunt on every channel: current and supply voltage, about 13.7 A range in 0.42 mA steps |
 | Diagnostics | LED per channel, RGB status LED, fault buzzer, test points, microSD logging, battery-backed clock and error log |
 | Microcontroller | STM32H755, dual-core Arm Cortex-M7 and Cortex-M4 |
 
 - **MOSFETs instead of relays:** the new solenoid valves need pulse-width modulation (PWM) to set their position, which the old on/off relay modules could not provide. The Toshiba TK110E10PL MOSFET handles the vent valve's 6.1 A with margin; with a maximum on-resistance of 10.7 mΩ, its calculated conduction loss is about 0.52 W at 7 A.
 - **Optocoupler gate drive:** the MOSFET needs a 10 V gate to switch fully on, which a 3.3 V microcontroller pin cannot provide. A Toshiba TLP152 drives the gate to about 12 V with around 1 A peak current for clean PWM edges, and isolates the logic from the 24 V side if a MOSFET fails.
 - **Timing budget:** I calculated the delay through each stage from datasheet worst-case values and drew it as a datasheet-style timing diagram. Command to valve power takes under 0.3 µs, well below the valve's millisecond mechanical response.
-- **Measured feedback:** a shunt and sense amplifier on each channel report the current each valve draws, enough to distinguish a working valve from an open or shorted coil. The old system only showed what had been commanded.
+- **Measured feedback:** the old system only showed what had been commanded. A 12 mΩ high-side shunt and a TI INA237 on each channel measure the current each valve actually draws, over a range of about 13.7 A in 0.42 mA steps. Worst-case datasheet accuracy is about ±25 mA at 7 A, enough to distinguish a working valve from an open or shorted coil. An RC filter at about 80 kHz on the sensor input removes MOSFET switching spikes with negligible added error.
 - **Thermal design:** the launch site reaches 45 to 50 °C ambient, so the MOSFETs are mounted on shared heatsinks.
 - **Fallback control:** a 2:1 multiplexer hands control back to the LabJack without rewiring, adding under 10 ns of delay.
 
@@ -118,7 +118,7 @@ The Valve Control Board switches power to the ground fill-system valves, the umb
   src={valveChannel}
   n={4}
   wide
-  alt="Signal chain for one valve channel. The controller, either the STM32H755 or the LabJack T7, feeds a 2:1 multiplexer (6.4 ns), then a TLP152 optocoupler gate driver (170 to 190 ns), then a TK110E10PL power MOSFET (40 to 90 ns, estimated), then the valve coil. The total from command to valve power is under 0.3 microseconds. A shunt and sense amplifier on the valve current report back to the microcontroller."
+  alt="Signal chain for one valve channel. The controller, either the STM32H755 or the LabJack T7, feeds a 2:1 multiplexer (6.4 ns), then a TLP152 optocoupler gate driver (170 to 190 ns), then a TK110E10PL power MOSFET (40 to 90 ns, estimated), then the valve coil. The total from command to valve power is under 0.3 microseconds. An INA237 current and voltage sensor with a 12 mΩ shunt on the valve current reports back to the microcontroller."
   caption="Signal chain for one valve channel, with worst-case datasheet delays for each stage. The MOSFET delay is an estimate."
 />
 
@@ -151,7 +151,7 @@ The boards have not been built yet. Each problem found while running the old pad
 | The solid-state relay modules were limited to 3 A and on/off switching, but the new vent valve draws about 6.1 A at 24 V. | MOSFET channels designed for 7 A, with PWM on every channel. |
 | Screw-terminal wires worked loose during operations, dropping sensor readings or valve control. | Latching, keyed connectors throughout, rated for the actual crimp terminal and wire gauge. |
 | The control software showed what had been commanded, not what the hardware did. | Current and voltage measured on every valve channel. |
-| On past trips, a pad box fault damaged a flight computer, and a flight computer fault damaged the pad box. | Fusing, flyback and TVS protection on the valve board, ideal diodes on the vehicle link and electronic fuses (eFuses) on the power rails. |
+| On past trips, a pad box fault damaged a flight computer, and a flight computer fault damaged the pad box. | Fuses and TVS diodes on every valve-board rail, ideal diodes on the vehicle link and electronic fuses (eFuses) on the power distribution rails. |
 | About AUD 1,100 per LabJack T7 and AUD 66.47 per relay module, with at least 10 channels needed. | Custom boards, with parts selected against datasheets and supplier availability. |
 
 {/* TODO: add the bring-up and test plan once the boards are ordered; replace this section's framing after first tests. */}
