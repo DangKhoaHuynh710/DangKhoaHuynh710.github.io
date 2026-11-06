@@ -2,6 +2,7 @@
 
 All content and structural changes to the site, newest first.
 
+- 2026-11-06 — Launch pad electronics (GSE) page published from GSE/handout.md: architecture, Valve Control Board and Umbilical & QD Board, safety design, problems on the old pad box, leadership work. Board renders, an architecture diagram and a valve signal-chain diagram. New Now entry for the design review; placeholder entry removed. Team clearance given.
 - 2026-11-01 — Rock Daisy page published after review: 7 kV from a 15 V boosted input and the 467 kV/m field stated, firmware diagram corrected to 4 s and 29 s, feed-through credited to Charlie Balderstone, reset-switch fault added, bench-test threshold confirmed at 1.3 g, video audio removed.
 - 2026-11-01 — Rock Daisy page written from the AURC 2026 report and published content, with the board photo, three-version render, annotated internals, firmware flow, feed-through, a bench-test video and a computer-vision frame. Team clearance given. MDX, video and wide-figure support added; the publishing gate now also drops uncleared projects at content load.
 - 2026-11-01 — Added README with a status board for pages and projects, open decisions, how-to for adding content, and the deploy checklist.

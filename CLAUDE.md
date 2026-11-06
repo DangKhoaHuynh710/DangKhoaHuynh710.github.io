@@ -164,7 +164,7 @@ Each project page follows the same structure: Overview → My role → Photos �
 ### B4.2 Ground Support Equipment (GSE) Co-Lead — USYD Rocketry Team, Project Kookaburra (July 2026–present)  [THE "NOW" SECTION, slug `gse-pad-box`]
 - Role: lead the electrical, electronics and software workstreams for the ground systems; manage and review the redesign of the launch controller, pad control box, antenna tracker and quick-disconnect electrical umbilical; coordinate requirements, design reviews, testing and documentation.
 - Architecture I defined for the pad box electronics: a relay/valve-driver board, a power distribution board, a command hub and sensor nodes, communicating over RS-485 (Modbus RTU). Design principle: hardware sets every safe default; firmware can only change state after boot.
-- Board I am designing (Altium, STM32H755): 12 channels switching fill-system valves, the umbilical release and the igniter through opto-isolated gate drivers and power MOSFETs, with per-channel fusing, flyback and TVS protection, and shunt-based current monitoring (INA3221). Core schematic (power, clocks, reset/boot, SWD, USB DFU) complete; driver/sense chain and connectors selected. Status will change; ask me for the current state before writing.
+- Board I am designing (Altium, STM32H755): 12 channels switching fill-system valves, the umbilical release and the igniter through opto-isolated gate drivers and power MOSFETs, with per-channel fusing, flyback and TVS protection, and shunt-based current monitoring (INA3221). Status (November 2026): this board, now called the Valve Control Board, and a second board I designed, the Umbilical & QD Board, have schematic and 4-layer layout complete and went through the team's Critical Design Review; not yet fabricated or tested. Details: `GSE/handout.md` (local, not in the repo). Open question: the handout lists an INA237 per channel and fuses per rail, which differs from INA3221 and per-channel fusing above. Status will change; ask me for the current state before writing.
 - Safety features worth describing in plain terms: hardware E-stop and arming key in series on the coil rail; relays/outputs fail open on loss of power; igniter path isolated.
 - Compliance note: the team works to competition safety rulebooks. On the site, say "designed to competition safety rules" and do not cite rule numbers or reproduce rule text.
 
@@ -217,7 +217,7 @@ Mechatronic Systems Design (C++/ROS2, TurtleBot), Mechatronics 2 (STM32 assembly
 
 ## B9. Still open
 
-1. Which projects are cleared by the rocketry team and FSAE team for photos and description (set `cleared: true` only when confirmed).
+1. Which projects are cleared by the rocketry team and FSAE team for photos and description (set `cleared: true` only when confirmed). Cleared so far: Rock Daisy (2026-11-01), GSE pad box (2026-11-06).
 2. Custom domain — later, if at all.
 3. Final LinkedIn URL (custom slug or current one).
 4. Which photos exist; whether there is a video of the checkout dashboard or the launch.

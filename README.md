@@ -19,9 +19,9 @@ Last reviewed: 2026-11-01
 |---|---|---|---|
 | Home | `/` | Live, placeholder | Portrait photo; optional second intro sentence |
 | About | `/about/` | Live, placeholder bio | Bio draft |
-| Now | `/now/` | Live, placeholder entry | Text for the GSE pad box entry |
+| Now | `/now/` | Live, 1 entry (GSE design review) | Next update after fabrication |
 | Resume | `/resume/` | Live, placeholder PDF | Real `public/resume.pdf`; one-line role descriptions |
-| Projects index | `/projects/` | Live, 1 project | More projects cleared |
+| Projects index | `/projects/` | Live, 2 projects | More projects cleared |
 
 ### Projects
 
@@ -30,7 +30,7 @@ A project page is only built when `cleared: true`. See [Publishing gate](#publis
 | Project | Slug | Cleared | Content | Photos | Waiting on |
 |---|---|---|---|---|---|
 | Rock Daisy payload | `rock-daisy` | Yes (2026-11-01) | Live | 5 figures, 1 video | Headline result number; reset-switch fix detail |
-| GSE pad control box | `gse-pad-box` | No | TODO headings only | None | Team clearance; current board status |
+| Launch pad electronics (GSE) | `gse-pad-box` | Yes (2026-11-06) | Live | 2 renders, 2 diagrams | Current-sense part and fusing confirmed; higher-resolution renders; test results |
 | FSAE low-voltage | `fsae-low-voltage` | No | TODO headings only | None | Team clearance; draft; photos |
 | 2-axis linear stage | `linear-stage` | No | TODO headings only | None | Year; exact lidar model; draft; photos |
 | Other work | `other-work` | No | TODO headings only | None | Years; draft; photos |
@@ -39,7 +39,7 @@ A project page is only built when `cleared: true`. See [Publishing gate](#publis
 
 From CLAUDE.md B9.
 
-- [ ] Which projects the rocketry and FSAE teams clear for photos and description (Rock Daisy: cleared 2026-11-01)
+- [ ] Which projects the rocketry and FSAE teams clear for photos and description (Rock Daisy: cleared 2026-11-01; GSE: cleared 2026-11-06)
 - [ ] Final LinkedIn URL (current one is in `src/lib/site.ts`)
 - [ ] Which photos exist; whether there is video of the checkout dashboard or launch
 - [ ] Custom domain (later, if at all)
