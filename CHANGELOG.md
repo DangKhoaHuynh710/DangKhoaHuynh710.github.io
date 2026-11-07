@@ -2,6 +2,7 @@
 
 All content and structural changes to the site, newest first.
 
+- 2026-11-07 — Home page: published "How I got into electronics and rockets", written by Dang Khoa and edited for length and style, with links to the Rock Daisy testing section and the GSE page.
 - 2026-11-07 — About page merged into Home: intro gains the Vietnam and career-goal lines, education, coursework and skills move below the projects, /about/ redirects to /#about. Added a hidden "Why electronics and rockets" section for Dang Khoa to write.
 - 2026-11-07 — Real resume published (phone-free web copy) and the Resume page rewritten to match it; About skills aligned with the resume; portrait added to the home page; no semicolons left in visible text; home email link obfuscated like the footer.
 - 2026-11-06 — Desktop layout fixed after testing in real Firefox and Chrome at 1024–1920 px: one 60rem frame for header, cards, footer and wide figures; project cards fill the row; figures sized to their images with captions aligned underneath. GSE page: current sensing (TI INA237, 12 mΩ shunt) and per-rail fusing restored, confirmed by Dang Khoa.
