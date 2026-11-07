@@ -1,14 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
+
+// Plain-text copy of public/resume.pdf. Keep the two in step: when the resume
+// changes, update this page and replace the PDF (the web copy has no phone number).
+const NEWS =
+  'https://www.sydney.edu.au/news-opinion/news/2026/07/09/sydney-students-win-big-at-international-rocketry-competition.html';
 ---
 
 <Base
   title="Resume"
-  description="Resume of Dang Khoa Huynh, Mechatronics with Space Engineering student at the University of Sydney."
+  description="Resume of Dang Khoa Huynh, a third-year Mechatronics with Space Engineering student at the University of Sydney who designs, builds and tests flight and ground electronics."
 >
   <article class="prose">
     <h1>Resume</h1>
-    <p><a href="/resume.pdf">Download the PDF</a>. The summary below is the same content in plain text.</p>
+    <p><a href="/resume.pdf">Download the PDF</a>. The same content is below in plain text.</p>
 
     <object class="pdf-frame no-print" data="/resume.pdf" type="application/pdf" aria-label="Resume PDF">
       <p class="muted">Your browser cannot display the PDF here. <a href="/resume.pdf">Open it directly</a>.</p>
@@ -16,15 +21,92 @@ import Base from '../layouts/Base.astro';
 
     <h2>Summary</h2>
     <p>
-      Third-year Bachelor of Engineering (Honours) student, Mechatronics with Space Engineering, University of
-      Sydney. WAM 90.3, Dalyell Scholar, Dean's List 2025. Expected graduation 2028.
+      Third-year mechatronics and space engineering student who designs, builds and tests flight and ground
+      electronics. Primary electronics engineer on an in-situ resource utilisation (ISRU) payload that won the SDL
+      Payload Challenge at the 2026 International Rocket Engineering Competition. Now co-leading a student rocket's
+      ground systems.
     </p>
 
-    <h2>Experience</h2>
+    <h2>Education</h2>
+    <p><strong>University of Sydney</strong>, BEng (Honours), Mechatronics with Space Engineering, 2024–2028 (expected)</p>
     <ul>
-      <li>Ground Support Equipment (GSE) Co-Lead, USYD Rocketry Team, July 2026–Present</li>
-      <li>Payload Primary Electronics Engineer, USYD Rocketry Team – Rock Daisy Payload, 2025–2026</li>
-      <li>Low Voltage Engineer, Sydney Motorsport (FSAE Electric), 2025–2026</li>
+      <li>Third year, WAM 90.3, Dalyell Scholar, Dean's List 2025, Robotics and Intelligent Systems specialisation</li>
+      <li>Units: Mechatronic Systems Design, Mechatronics 2, Space Engineering 1 and 2, Electronic Devices and Circuits</li>
+    </ul>
+
+    <h2>Skills</h2>
+    <ul>
+      <li><strong>Electrical design:</strong> schematic and PCB layout (Altium, KiCad), MOSFET drivers, circuit protection, SPICE</li>
+      <li><strong>Build and test:</strong> SMD soldering and PCB assembly, bring-up and test firmware, oscilloscope debugging</li>
+      <li><strong>Embedded:</strong> STM32 (H7, F3), ESP32-S3, FreeRTOS, ARM assembly, SPI/I2C/UART/CAN/RS-485, WiFi/BLE</li>
+      <li><strong>Programming and CAD:</strong> C/C++, Python, MATLAB, ROS2, Git, Linux, Fusion 360, SolidWorks, Onshape</li>
+      <li><strong>Engineering practice:</strong> requirements management, design reviews, technical reporting</li>
+    </ul>
+
+    <h2>Experience</h2>
+
+    <h3>Ground Support Equipment (GSE) Co-Lead, USYD Rocketry Team</h3>
+    <p class="meta"><span class="dates">July 2026–Present</span> · <a href="/projects/gse-pad-box/">Project page</a></p>
+    <ul>
+      <li>
+        Lead ground-systems electronics and software (launch controller, pad box, antenna tracker, umbilical). Defined
+        the pad-box redesign as five team-designed boards on one RS-485 (Modbus RTU) bus.
+      </li>
+      <li>
+        Designed the 12-channel Valve Control Board (STM32H755, 4-layer, Altium): 7 A PWM MOSFET channels,
+        opto-isolated gate drive, per-channel INA237 current sensing, fused and TVS-protected rails.
+      </li>
+      <li>
+        Designed the Umbilical and QD Board: USB host to both flight computers, ideal-diode input protection with
+        under- and overvoltage lockout, relay-driven quick disconnect and payload charging.
+      </li>
+      <li>
+        Wrote the design briefs new engineers used for three of the boards, the team's PCB design guide and induction
+        task, and led the electronics section of the Critical Design Review.
+      </li>
+    </ul>
+
+    <h3>Payload Primary Electronics Engineer, USYD Rocketry Team – Rock Daisy Payload</h3>
+    <p class="meta"><span class="dates">2025–2026</span> · <a href="/projects/rock-daisy/">Project page</a></p>
+    <ul>
+      <li>
+        <strong>1st place, SDL Payload Challenge, International Rocket Engineering Competition 2026</strong> (150 teams)
+        for a CubeSat-class ISRU experiment on electrostatic regolith separation (<a href={NEWS} rel="noopener">USYD news</a>).
+      </li>
+      <li>
+        Designed the PCB (three revisions) and firmware for the dual-ESP32-S3 flight computer and OV5640 camera node:
+        20 MHz SPI sensors, SD logging, actuators and interlocked 7 kV switching.
+      </li>
+      <li>Architected a five-task FreeRTOS system with a launch-triggered flight state machine.</li>
+      <li>
+        Built a WiFi checkout dashboard for bring-up and pre-flight testing: actuate each component individually, read
+        live telemetry and board health, and pull logs from the SD card.
+      </li>
+      <li>Assembled the flight PCB and designed and built the payload's internal cable harness.</li>
+    </ul>
+
+    <h3>Low Voltage Engineer, Sydney Motorsport (FSAE Electric)</h3>
+    <p class="meta"><span class="dates">2025–2026</span></p>
+    <ul>
+      <li>
+        Redesigned the tractive-system status light on a 12 V aluminium PCB with 700 mA power LEDs, and verified
+        daylight visibility against competition rules with a photometric analysis.
+      </li>
+      <li>
+        Designed a test motherboard for integration testing of the brake-system plausibility (BSPD) boards, which
+        monitor pedal travel, and the control circuits that switch the vehicle's 480 V accumulator.
+      </li>
+    </ul>
+
+    <h2>Projects</h2>
+    <h3>2-Axis Linear Motion Stage with Lidar Obstacle Avoidance</h3>
+    <p class="meta"><span>Bare-metal C, STM32F3</span></p>
+    <ul>
+      <li>Designed the electronics, cable harness and 3D-printed rail, base and carriage parts for a two-axis stage.</li>
+      <li>
+        Wrote interrupt-driven bare-metal C (no HAL) driving two stepper motors via TMC2209 drivers, with serial
+        keyboard control and lidar-based wall avoidance (RPLIDAR A1M8).
+      </li>
     </ul>
   </article>
 </Base>

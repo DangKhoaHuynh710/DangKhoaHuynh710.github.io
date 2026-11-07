@@ -17,10 +17,10 @@ Last reviewed: 2026-11-01
 
 | Page | Route | State | Waiting on |
 |---|---|---|---|
-| Home | `/` | Live, placeholder | Portrait photo; optional second intro sentence |
-| About | `/about/` | Live, placeholder bio | Bio draft |
+| Home | `/` | Live, with portrait | — |
+| About | `/about/` | Live, skills match the resume | Longer bio if wanted |
 | Now | `/now/` | Live, 1 entry (GSE design review) | Next update after fabrication |
-| Resume | `/resume/` | Live, placeholder PDF | Real `public/resume.pdf`; one-line role descriptions |
+| Resume | `/resume/` | Live, real PDF (phone-free web copy) and plain-text version | Update both whenever the resume changes |
 | Projects index | `/projects/` | Live, 2 projects | More projects cleared |
 
 ### Projects
@@ -47,7 +47,7 @@ From CLAUDE.md B9.
 
 ### Next up
 
-1. Replace `public/resume.pdf` with the real resume.
+1. Keep `public/resume.pdf` and the Resume page text in step with the resume source (web copy without the phone number).
 2. Add the Rock Daisy headline result and the reset-switch fix when ready (hidden comments in `rock-daisy.mdx`).
 3. About bio and portrait.
 

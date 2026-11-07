@@ -2,6 +2,7 @@
 
 All content and structural changes to the site, newest first.
 
+- 2026-11-07 — Real resume published (phone-free web copy) and the Resume page rewritten to match it; About skills aligned with the resume; portrait added to the home page; no semicolons left in visible text; home email link obfuscated like the footer.
 - 2026-11-06 — Desktop layout fixed after testing in real Firefox and Chrome at 1024–1920 px: one 60rem frame for header, cards, footer and wide figures; project cards fill the row; figures sized to their images with captions aligned underneath. GSE page: current sensing (TI INA237, 12 mΩ shunt) and per-rail fusing restored, confirmed by Dang Khoa.
 - 2026-11-06 — Site revision: light mode is now the default, with a dark-mode toggle in the header; project pages use a centred reading column and a key-facts strip; Rock Daisy and GSE pages rewritten with plain headings, tables and "Label:" lead-ins; GSE diagrams recoloured for light mode; visible TODO text and the placeholder portrait removed from Home, About and Resume.
 - 2026-11-06 — Launch pad electronics (GSE) page published from GSE/handout.md: architecture, Valve Control Board and Umbilical & QD Board, safety design, problems on the old pad box, leadership work. Board renders, an architecture diagram and a valve signal-chain diagram. New Now entry for the design review; placeholder entry removed. Team clearance given.

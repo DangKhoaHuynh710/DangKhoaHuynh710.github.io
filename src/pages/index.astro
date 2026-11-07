@@ -2,7 +2,9 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { SITE } from '../lib/site';
+import Figure from '../components/Figure.astro';
+import portrait from '../assets/images/about/portrait.jpg';
+import { SITE, entityEncode } from '../lib/site';
 import { isVisible } from '../lib/visibility';
 
 const featured = (await getCollection('projects', (p) => isVisible(p) && p.data.featured))
@@ -33,7 +35,7 @@ const bright = stars(16, 20250101, ' 3px 1px');
 ---
 
 <Base title={SITE.title}>
-  <section class="hero">
+  <section class="hero intro">
     <div class="sky" aria-hidden="true">
       <i class="stars-far" style={`box-shadow: ${far};`}></i>
       <i class="stars" style={`box-shadow: ${near};`}></i>
@@ -56,10 +58,16 @@ const bright = stars(16, 20250101, ' 3px 1px');
       <ul class="intro-links">
         <li><a href="/resume.pdf">Resume (PDF)</a></li>
         <li><a href={SITE.linkedin} rel="me noopener">LinkedIn</a></li>
-        <li><a href={`mailto:${SITE.email}`}>Email</a></li>
+        <li><Fragment set:html={`<a href="${entityEncode('mailto:' + SITE.email)}">Email</a>`} /></li>
       </ul>
     </div>
-    {/* TODO: add a portrait photo here once available (src/assets/images/about/). */}
+    <Figure
+      src={portrait}
+      alt="Portrait of Dang Khoa Huynh, smiling slightly, in a grey work shirt with a rocket logo, standing in front of green foliage."
+      loading="eager"
+      widths={[320, 480, 640]}
+      sizes="(min-width: 720px) 16rem, 11rem"
+    />
   </section>
 
   <section>

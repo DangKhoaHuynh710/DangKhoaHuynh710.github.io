@@ -87,7 +87,7 @@ The flight computer splits the work between two ESP32-S3 microcontrollers, chose
 | Sensors | ADXL375 high-g accelerometer and MS5607 barometer on a 20 MHz SPI bus |
 | Storage and time | microSD card and a battery-backed real-time clock |
 | Actuators | DC motor (Pololu driver), servo, buzzer, 7 kV high-voltage module |
-| Power | Three-cell lithium-ion battery; 5 V and 3.3 V regulators; 15 V boosted supply for the high-voltage module |
+| Power | Three-cell lithium-ion battery, 5 V and 3.3 V regulators, and a 15 V boosted supply for the high-voltage module |
 
 The experiment controller uses both of its cores. One runs the flight state machine. The other monitors the telemetry stream as a watchdog, which protects the flight logic from a single false sensor reading.
 
@@ -97,8 +97,8 @@ The firmware samples the accelerometer at 800 Hz, low-pass filters it, and evalu
 
 | Time | Event |
 |---|---|
-| T+0 s | Launch declared. Agitator motor starts charging the particles; camera starts recording. |
-| T+4 s | Servo releases the particles; high-voltage supply and buzzer switch on. |
+| T+0 s | Launch declared. The agitator motor starts charging the particles and the camera starts recording. |
+| T+4 s | The servo releases the particles, and the high-voltage supply and buzzer switch on. |
 | T+29 s | Every output returns to its safe, inactive state. |
 
 T+ times count from the software launch declaration, not physical lift-off. At power-up, a mode-select pin chooses between bench test mode and flight mode. The board then starts each subsystem in turn: SPI bus, microSD card, non-volatile storage, sensors, wireless link and actuator outputs. Any failure is saved to non-volatile storage and reported over USB and WiFi.
@@ -172,7 +172,7 @@ In flight, the camera recorded the particle stream through the high-voltage wind
   n={5}
   wide
   alt="Two video frames from inside the payload. Left: the raw camera frame of the particle stream between the plates. Right: the same frame with red lines on the detected plate edges, pink dots on the stream centre in each band, and a green fitted centreline."
-  caption="One frame from the high-voltage window, 0.4 s after the plates switched on (T+4.40 s). Left: raw frame. Right: pipeline output. Red lines mark the plate edges, found with RANSAC, a line-fitting method that ignores outliers. Pink dots mark the stream centre in each band; the green line is the fitted centreline."
+  caption="One frame from the high-voltage window, 0.4 s after the plates switched on (T+4.40 s). Left: raw frame. Right: pipeline output. Red lines mark the plate edges, found with RANSAC, a line-fitting method that ignores outliers. Pink dots mark the stream centre in each band, and the green line is the fitted centreline."
 />
 
 ## Links

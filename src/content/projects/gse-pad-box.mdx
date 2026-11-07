@@ -102,12 +102,12 @@ The Valve Control Board switches power to the ground fill-system valves, the umb
 | Switching | Low-side N-channel MOSFET with optocoupler gate driver and PWM |
 | Channel current | Designed for 7 A |
 | Control | Pad box mini-PC over RS-485, or the LabJack T7, selected by a jumper |
-| Protection | Time-lag ceramic fuses (10 A and 6.3 A) and transient-voltage-suppression (TVS) diodes on the 24 V and 12 V rails; resettable fuse and TVS diode on the 5 V rail; flyback protection on the valve outputs |
+| Protection | Time-lag ceramic fuses (10 A and 6.3 A) and transient-voltage-suppression (TVS) diodes on the 24 V and 12 V rails, a resettable fuse and TVS diode on the 5 V rail, and flyback protection on the valve outputs |
 | Sensing | TI INA237 with a 12 mΩ shunt on every channel: current and supply voltage, about 13.7 A range in 0.42 mA steps |
 | Diagnostics | LED per channel, RGB status LED, fault buzzer, test points, microSD logging, battery-backed clock and error log |
 | Microcontroller | STM32H755, dual-core Arm Cortex-M7 and Cortex-M4 |
 
-- **MOSFETs instead of relays:** the new solenoid valves need pulse-width modulation (PWM) to set their position, which the old on/off relay modules could not provide. The Toshiba TK110E10PL MOSFET handles the vent valve's 6.1 A with margin; with a maximum on-resistance of 10.7 mΩ, its calculated conduction loss is about 0.52 W at 7 A.
+- **MOSFETs instead of relays:** the new solenoid valves need pulse-width modulation (PWM) to set their position, which the old on/off relay modules could not provide. The Toshiba TK110E10PL MOSFET handles the vent valve's 6.1 A with margin. With a maximum on-resistance of 10.7 mΩ, its calculated conduction loss is about 0.52 W at 7 A.
 - **Optocoupler gate drive:** the MOSFET needs a 10 V gate to switch fully on, which a 3.3 V microcontroller pin cannot provide. A Toshiba TLP152 drives the gate to about 12 V with around 1 A peak current for clean PWM edges, and isolates the logic from the 24 V side if a MOSFET fails.
 - **Timing budget:** I calculated the delay through each stage from datasheet worst-case values and drew it as a datasheet-style timing diagram. Command to valve power takes under 0.3 µs, well below the valve's millisecond mechanical response.
 - **Measured feedback:** the old system only showed what had been commanded. A 12 mΩ high-side shunt and a TI INA237 on each channel measure the current each valve actually draws, over a range of about 13.7 A in 0.42 mA steps. Worst-case datasheet accuracy is about ±25 mA at 7 A, enough to distinguish a working valve from an open or shorted coil. An RC filter at about 80 kHz on the sensor input removes MOSFET switching spikes with negligible added error.
@@ -132,7 +132,7 @@ The Umbilical and QD Board is the pad box's electrical link to the rocket until 
 | Pad box link | One RS-485 channel to the Command Hub |
 | Vehicle valves | Carries main oxidiser, vent and dump valve power from the Valve Control Board and monitors each line's voltage |
 | Quick disconnect | Extends and retracts the fill-line disconnect actuator, commanded from the flight line or from switches on the enclosure |
-| Charging | 5 V to the forward and aft avionics; 24 V to the payload's three-cell lithium-ion pack, switched by a relay |
+| Charging | 5 V to the forward and aft avionics, and 24 V to the payload's three-cell lithium-ion pack through a relay |
 | Input protection | Resettable fuse, ideal diode and TVS diode on each input |
 
 - **Two USB hosts, one microcontroller:** both flight computers are USB devices, so the board must host them simultaneously. The STM32H755 has two USB controllers, so a single chip serves both.

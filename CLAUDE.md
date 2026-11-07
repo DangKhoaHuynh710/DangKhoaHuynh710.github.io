@@ -144,11 +144,15 @@ The site must never contradict my resume. Dates, titles and what I did personall
 
 ## B3. Skills (as stated on my resume; do not inflate)
 
-- Electrical design: schematic and PCB layout (Altium, KiCad), cable harnessing, MOSFET drivers, SPICE/Falstad simulation.
-- Build and test: SMD soldering and PCB assembly, bring-up and test firmware, oscilloscope and function generator debugging.
-- Embedded: STM32 (H7, F3), ESP32-S3, Raspberry Pi, FreeRTOS, PlatformIO, ARM assembly, SPI/I2C/UART/CAN, WiFi (ESP32 AP), Bluetooth.
-- Programming and CAD: C/C++, Python (NumPy, Pandas, OpenCV), MATLAB, ROS2, Git, Linux; Fusion 360, SolidWorks, Onshape.
-- Engineering practice: requirements management, design reviews, hazard analysis, technical reporting (LaTeX).
+Matches the resume as of 2026-11-07 (the About and Resume pages use these lines verbatim):
+
+- Electrical design: schematic and PCB layout (Altium, KiCad), MOSFET drivers, circuit protection, SPICE.
+- Build and test: SMD soldering and PCB assembly, bring-up and test firmware, oscilloscope debugging.
+- Embedded: STM32 (H7, F3), ESP32-S3, FreeRTOS, ARM assembly, SPI/I2C/UART/CAN/RS-485, WiFi/BLE.
+- Programming and CAD: C/C++, Python, MATLAB, ROS2, Git, Linux, Fusion 360, SolidWorks, Onshape.
+- Engineering practice: requirements management, design reviews, technical reporting.
+
+Also true but not on the resume: cable harnessing, Falstad, function generators, Raspberry Pi, PlatformIO, NumPy/Pandas/OpenCV, hazard analysis, LaTeX.
 
 ## B4. Experience and projects (content inventory for project pages)
 
