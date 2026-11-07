@@ -52,7 +52,7 @@
     <text x="600" y="270" font-size="17" fill="#6b7280">runs the ground control software</text>
 
     <text x="600" y="367" font-size="24" font-weight="600">Command Hub</text>
-    <text x="600" y="394" font-size="17" fill="#6b7280">RS-485 master for up to 10 buses</text>
+    <text x="600" y="394" font-size="17" fill="#6b7280">10 point-to-point RS-485 links</text>
 
     <text x="1005" y="236" font-size="22" font-weight="600">Power Distribution</text>
     <text x="1005" y="264" font-size="17" fill="#6b7280">protected 5, 12, 24 and 48 V</text>

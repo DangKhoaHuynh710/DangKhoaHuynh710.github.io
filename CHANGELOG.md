@@ -2,6 +2,7 @@
 
 All content and structural changes to the site, newest first.
 
+- 2026-11-07 — Home story reworded to read more naturally. Corrected the pad-box network everywhere (GSE page, diagram, Now, Resume page, resume PDF, story): not one shared RS-485 bus but a Command Hub with 10 point-to-point RS-485 links, one per board, chosen for robustness over long cable runs and industry acceptance.
 - 2026-11-07 — Home page: published "How I got into electronics and rockets", written by Dang Khoa and edited for length and style, with links to the Rock Daisy testing section and the GSE page.
 - 2026-11-07 — About page merged into Home: intro gains the Vietnam and career-goal lines, education, coursework and skills move below the projects, /about/ redirects to /#about. Added a hidden "Why electronics and rockets" section for Dang Khoa to write.
 - 2026-11-07 — Real resume published (phone-free web copy) and the Resume page rewritten to match it; About skills aligned with the resume; portrait added to the home page; no semicolons left in visible text; home email link obfuscated like the footer.

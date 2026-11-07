@@ -2,7 +2,7 @@
 title: Launch pad electronics for Project Kookaburra
 role: Ground Support Equipment (GSE) Co-Lead, USYD Rocketry Team
 dates: July 2026–Present
-summary: Leading the redesign of a rocket team's launch pad electronics into a modular system of custom boards on one RS-485 bus, and designing its 12-channel valve control board and vehicle umbilical board.
+summary: Leading the redesign of a rocket team's launch pad electronics into a modular system of custom boards linked over RS-485, and designing its 12-channel valve control board and vehicle umbilical board.
 cover: valve-control-board-cover.png
 coverAlt: 3D render of the Valve Control Board V1.0 from above. A black PCB with angled lower edges, an STM32 microcontroller in the centre, two diagonal rows of power MOSFET channels and latching connectors around the edges.
 cleared: true
@@ -15,8 +15,8 @@ highlights:
     value: 12 × PWM, 7 A each
   - label: Boards
     value: 2 designed, 3 briefed
-  - label: Field bus
-    value: RS-485, Modbus RTU
+  - label: Board links
+    value: Point-to-point RS-485, Modbus RTU
 ---
 
 import Figure from '../../components/Figure.astro';
@@ -29,7 +29,7 @@ import valveChannel from '../../assets/images/gse-pad-box/valve-channel.svg';
 
 Project Kookaburra is the USYD Rocketry Team's next rocket. Before it can launch, equipment at the pad has to fill it with liquid nitrous oxide, operate the ground valves, disconnect the fill line and stay connected to the rocket's flight computers, all controlled from a flight line several hundred metres away. This is the ground support equipment (GSE), and its electronics live in the pad box, a weatherproof enclosure at the launch pad.
 
-On Galah, the team's 2026 rocket, the pad box was built around an off-the-shelf data acquisition unit, a LabJack T7, with screw terminals and solid-state relay modules. As GSE co-lead I am replacing it with team-designed boards on a single RS-485 bus. I designed two of them: the Valve Control Board and the Umbilical and Quick Disconnect (QD) Board.
+On Galah, the team's 2026 rocket, the pad box was built around an off-the-shelf data acquisition unit, a LabJack T7, with screw terminals and solid-state relay modules. As GSE co-lead I am replacing it with team-designed boards, each with its own RS-485 link to a central Command Hub. I designed two of them: the Valve Control Board and the Umbilical and Quick Disconnect (QD) Board.
 
 **Status (November 2026):** both boards have complete schematics and 4-layer printed circuit board (PCB) layouts and went through the team's Critical Design Review. They have not been built or tested, so every number on this page is a design value from manufacturers' datasheets.
 
@@ -69,7 +69,7 @@ The boards have not been built yet, so these are 3D renders of the completed lay
 
 Each function now has its own small board, and every board follows the same rules:
 
-- **One field bus:** every board talks RS-485, a robust long-distance wired standard, using Modbus RTU, a simple industrial protocol, over its own link from the Command Hub. Any new board that speaks RS-485 plugs straight into the system, so new features no longer depend on finding an off-the-shelf board that fits.
+- **Point-to-point RS-485:** the Command Hub has 10 RS-485 ports, and each board gets its own link, using Modbus RTU, a simple industrial protocol. RS-485 was chosen because it is robust over long cable runs and widely trusted in industry. Any new board that speaks RS-485 plugs straight into the system, so new features no longer depend on finding an off-the-shelf board that fits.
 - **One trunk cable:** a single RJ45 cable carries both the RS-485 link and 12 V power to each remote board.
 - **Digitise at the sensor:** Sensor Nodes sit next to the pressure, load-cell and temperature sensors and send digital readings, so long cable runs no longer add noise to analogue signals.
 - **Connectors:** every connector latches and is keyed, with a different connector family for each voltage, so cables cannot work loose or be plugged into the wrong socket.
@@ -79,7 +79,7 @@ Each function now has its own small board, and every board follows the same rule
   src={architecture}
   n={3}
   wide
-  alt="Block diagram of the Kookaburra pad box electronics. The launch controller at the flight line links wirelessly to the pad box mini-PC, which connects over USB to the Command Hub. The hub runs one RS-485 bus each to the Valve Control Board, the Umbilical and QD Board and the Sensor Nodes. The Valve Control Board drives 12 ground fill-system valves and passes valve power to the Umbilical and QD Board, which connects to the launch vehicle's two flight computers, its main oxidiser, vent and dump valves and the fill-line quick disconnect. A Power Distribution Board supplies protected 5, 12, 24 and 48 V rails. The two boards I designed are outlined in green, the three I briefed in blue."
+  alt="Block diagram of the Kookaburra pad box electronics. The launch controller at the flight line links wirelessly to the pad box mini-PC, which connects over USB to the Command Hub. The hub runs a separate point-to-point RS-485 link to each board: the Valve Control Board, the Umbilical and QD Board and the Sensor Nodes. The Valve Control Board drives 12 ground fill-system valves and passes valve power to the Umbilical and QD Board, which connects to the launch vehicle's two flight computers, its main oxidiser, vent and dump valves and the fill-line quick disconnect. A Power Distribution Board supplies protected 5, 12, 24 and 48 V rails. The two boards I designed are outlined in green, the three I briefed in blue."
   caption="Pad box electronics. Green: boards I designed. Blue: boards I wrote the briefs for, designed by new team members. Grey: other equipment."
 />
 
