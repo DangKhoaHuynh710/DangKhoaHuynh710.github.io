@@ -338,6 +338,19 @@ main {
   list-style: none;
 }
 
+/* Home page sections below the hero */
+.home-section { margin-top: var(--space-5); }
+.story { margin-top: var(--space-4); }
+.story h2 { margin-top: 0; }
+.background-grid { display: grid; gap: var(--space-2) var(--space-4); }
+@media (min-width: 720px) {
+  .background-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+.background h3 { font-size: var(--step-0); margin-top: var(--space-2); }
+.background-grid > div > h3:first-child { margin-top: 0; }
+.background ul { padding-left: 1.1rem; }
+.skills li + li { margin-top: 0.4rem; }
+
 /* Figures */
 .figure {
   margin: var(--space-3) 0;

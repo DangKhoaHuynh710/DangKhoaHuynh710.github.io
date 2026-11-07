@@ -22,8 +22,8 @@ This file is the source of truth for this repo. Part A records the decisions alr
 
 | Route | Purpose |
 |---|---|
-| `/` | One paragraph who I am, one photo, three featured project cards (Rock Daisy, GSE pad box, FSAE), links to Resume (PDF), LinkedIn, email |
-| `/about/` | Longer bio, education, skills, the two team roles, one line on Vietnam → Sydney |
+| `/` | Who I am (intro, photo, Vietnam → Sydney, career goal), "Why electronics and rockets" in my own words, featured project cards, education and skills, links to Resume (PDF), LinkedIn, email. The old About page was merged in here on 2026-11-07 |
+| `/about/` | Redirects to `/#about` (kept so old links work; excluded from the sitemap) |
 | `/now/` | What I am working on currently. Dated entries, newest first, one Markdown file per entry. First entry: the GSE pad box board |
 | `/projects/` | Index: card per cleared project (cover image, title, role, dates, one-line summary) |
 | `/projects/<slug>/` | One page per project. Fixed section order: Overview → My role → Photos → Design decisions → Testing and what broke → Result → Links |
@@ -52,11 +52,12 @@ src/
     Figure.astro               # image + required caption/alt, uses astro:assets Image
   pages/
     index.astro
-    about.astro
     now.astro
     resume.astro
     projects/index.astro
     projects/[slug].astro      # getStaticPaths filters cleared === true
+  writing/
+    why-i-build.md             # my "Why electronics and rockets" text; shown only when ready: true
   styles/
     global.css
 public/

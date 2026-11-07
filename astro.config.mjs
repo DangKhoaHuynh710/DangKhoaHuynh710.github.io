@@ -9,7 +9,11 @@ import clearedImages from './plugins/cleared-images.mjs';
 export default defineConfig({
   site: 'https://dangkhoahuynh710.github.io',
   trailingSlash: 'always',
-  integrations: [mdx(), sitemap()],
+  // The About page was merged into the home page (2026-11-07); keep old links working.
+  redirects: {
+    '/about': '/#about',
+  },
+  integrations: [mdx(), sitemap({ filter: (page) => !page.endsWith('/about/') })],
   build: {
     format: 'directory',
   },

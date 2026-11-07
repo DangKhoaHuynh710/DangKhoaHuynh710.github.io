@@ -18,7 +18,8 @@ Last reviewed: 2026-11-01
 | Page | Route | State | Waiting on |
 |---|---|---|---|
 | Home | `/` | Live, with portrait | — |
-| About | `/about/` | Live, skills match the resume | Longer bio if wanted |
+| About | `/about/` | Merged into Home; redirects to `/#about` | — |
+| Home: "Why electronics and rockets" | `src/writing/why-i-build.md` | Hidden until written | Dang Khoa writes a draft, Claude refines it |
 | Now | `/now/` | Live, 1 entry (GSE design review) | Next update after fabrication |
 | Resume | `/resume/` | Live, real PDF (phone-free web copy) and plain-text version | Update both whenever the resume changes |
 | Projects index | `/projects/` | Live, 2 projects | More projects cleared |
@@ -102,6 +103,10 @@ npm run dev:drafts
 ```
 
 It shows uncleared projects with a "Draft preview" banner. It only works in the dev server and can never affect a build.
+
+### The "Why electronics and rockets" section
+
+Write in `src/writing/why-i-build.md`, below the prompts (they are comments and never appear on the site). The section stays hidden while `ready: false`. Once the text is final, set `ready: true` and it appears on the home page under the intro.
 
 ### A Now entry
 

@@ -4,12 +4,19 @@ import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Figure from '../components/Figure.astro';
 import portrait from '../assets/images/about/portrait.jpg';
+import * as story from '../writing/why-i-build.md';
 import { SITE, entityEncode } from '../lib/site';
 import { isVisible } from '../lib/visibility';
 
 const featured = (await getCollection('projects', (p) => isVisible(p) && p.data.featured))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || b.data.dates.localeCompare(a.data.dates))
   .slice(0, 3);
+
+// "Why electronics and rockets" section: written by Dang Khoa in src/writing/why-i-build.md.
+// Shown only when the file says ready: true and has real text (comments do not count).
+// The writing prompts are HTML comments in that file; strip them so they never reach the page source.
+const storyHtml = (await story.compiledContent()).replace(/<!--[\s\S]*?-->/g, '').trim();
+const showStory = story.frontmatter.ready === true && storyHtml.replace(/<[^>]+>/g, '').trim().length > 0;
 
 // Starfield for the hero, generated once at build time as box-shadow offsets
 // (no client-side JS). Seeded so every build produces the same sky.
@@ -46,14 +53,15 @@ const bright = stars(16, 20250101, ' 3px 1px');
     <div class="prose">
       <h1>Dang Khoa Huynh</h1>
       <p>
-        I am a third-year Mechatronics with Space Engineering student at the University of Sydney. I design,
-        build and test flight and ground electronics: PCBs, firmware and cable harnesses for rocket payloads,
-        launch-pad control systems and an electric race car.
+        I am a third-year Mechatronics with Space Engineering student at the University of Sydney, originally from
+        Vietnam. I design, build and test flight and ground electronics: PCBs, firmware and cable harnesses for rocket
+        payloads, launch-pad control systems and an electric race car.
       </p>
       <p>
         Most recently I was the primary electronics engineer for <a href="/projects/rock-daisy/">Rock Daisy</a>, which
         won the SDL Payload Challenge at IREC 2026. I now co-lead ground support equipment for the team's next
-        rocket, <a href="/projects/gse-pad-box/">Project Kookaburra</a>.
+        rocket, <a href="/projects/gse-pad-box/">Project Kookaburra</a>. I am working towards a career in electronics
+        and embedded hardware in the aerospace and space industry.
       </p>
       <ul class="intro-links">
         <li><a href="/resume.pdf">Resume (PDF)</a></li>
@@ -70,7 +78,14 @@ const bright = stars(16, 20250101, ' 3px 1px');
     />
   </section>
 
-  <section>
+  {showStory && (
+    <section class="story prose" id="about">
+      <h2>{story.frontmatter.title}</h2>
+      <Fragment set:html={storyHtml} />
+    </section>
+  )}
+
+  <section class="home-section">
     <h2>Selected projects</h2>
     {featured.length > 0 ? (
       <ul class="cards">{featured.map((p) => <ProjectCard project={p} />)}</ul>
@@ -79,5 +94,43 @@ const bright = stars(16, 20250101, ' 3px 1px');
         Project pages are being prepared. See <a href="/now/">what I am working on now</a>.
       </p>
     )}
+  </section>
+
+  <section class="home-section background" id={showStory ? 'background' : 'about'}>
+    <h2>Education and skills</h2>
+    <div class="background-grid">
+      <div>
+        <h3>Education</h3>
+        <p>
+          <strong>University of Sydney</strong>, Bachelor of Engineering (Honours), Mechatronics with Space
+          Engineering, Robotics and Intelligent Systems specialisation. Third year in 2026, graduating in 2028.
+        </p>
+        <ul>
+          <li>WAM 90.3</li>
+          <li>Dalyell Scholar</li>
+          <li>Dean's List of Excellence in Academic Performance 2025</li>
+        </ul>
+        <h3>Relevant coursework</h3>
+        <ul>
+          <li>Mechatronic Systems Design (C++ and ROS2 on a TurtleBot)</li>
+          <li>Mechatronics 2 (STM32 assembly and bare-metal C)</li>
+          <li>Space Engineering 1 and 2 (satellite constellations, mission planning, orbital mechanics)</li>
+          <li>Electronic Devices and Circuits (diode, transistor and MOSFET circuits)</li>
+          <li>Engineering Analysis (PDEs and numerical methods)</li>
+          <li>Machine Learning</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Skills</h3>
+        <ul class="skills">
+          <li><strong>Electrical design:</strong> schematic and PCB layout (Altium, KiCad), MOSFET drivers, circuit protection, SPICE</li>
+          <li><strong>Build and test:</strong> SMD soldering and PCB assembly, bring-up and test firmware, oscilloscope debugging</li>
+          <li><strong>Embedded:</strong> STM32 (H7, F3), ESP32-S3, FreeRTOS, ARM assembly, SPI/I2C/UART/CAN/RS-485, WiFi/BLE</li>
+          <li><strong>Programming and CAD:</strong> C/C++, Python, MATLAB, ROS2, Git, Linux, Fusion 360, SolidWorks, Onshape</li>
+          <li><strong>Engineering practice:</strong> requirements management, design reviews, technical reporting</li>
+        </ul>
+        <p class="muted small">Roles, dates and the downloadable PDF are on the <a href="/resume/">resume page</a>.</p>
+      </div>
+    </div>
   </section>
 </Base>
